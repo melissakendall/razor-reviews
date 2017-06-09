@@ -5,7 +5,6 @@ module.exports = {
   init: function (callback) {
     var config = {
       apiKey: "AIzaSyBKQQFa_fUW-2SUww7zX019idRrO2AWYTI",
-      authDomain: "razor-reviews.firebaseapp.com",
       databaseURL: "https://razor-reviews.firebaseio.com",
       projectId: "razor-reviews",
       storageBucket: "razor-reviews.appspot.com",
