@@ -6,9 +6,8 @@ module.exports = {
     var config = {
       apiKey: "AIzaSyBKQQFa_fUW-2SUww7zX019idRrO2AWYTI",
       databaseURL: "https://razor-reviews.firebaseio.com",
-      projectId: "razor-reviews",
-      storageBucket: "razor-reviews.appspot.com",
-      messagingSenderId: "1009018933398"
+      authDomain: "razor-reviews.firebaseapp.com",
+      projectId: "razor-reviews"
     };
     Firebase.initializeApp(config);
 
