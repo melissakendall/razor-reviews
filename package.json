@@ -1,23 +1,38 @@
 {
-  "name": "razor-reviews",
-  "version": "1.0.0",
-  "description": "",
+  "name": "movie-db",
+  "version": "0.1.0",
+  "description": "Firebase based app",
   "main": "index.js",
-  "dependencies": {
-    "firebase": "^4.1.2"
-  },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server --content-base public/",
+    "build": "webpack --production --progress",
+    "watch": "webpack --production --progress --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/melissakendall/razor-reviews.git"
+    "url": "git+https://github.com/time2hack/movieDB.git"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "Firebase",
+    "jQuery",
+    "Bootstrap"
+  ],
+  "author": "Pankaj Patel <patel.pankaj@live.in>",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/melissakendall/razor-reviews/issues"
+    "url": "https://github.com/time2hack/movieDB/issues"
   },
-  "homepage": "https://github.com/melissakendall/razor-reviews#readme"
+  "homepage": "https://github.com/time2hack/movieDB#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "firebase": "^3.0.5",
+    "jquery": "^3.0.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.26.1",
+    "html-webpack-plugin": "^2.24.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  }
 }
