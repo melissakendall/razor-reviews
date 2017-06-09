@@ -20,5 +20,3 @@ jspm_packages
 # Explicit Ignores
 
 .firebaserc
-src/js/auth.js
-public/
