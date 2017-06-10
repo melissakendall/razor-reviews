@@ -1,15 +1,9 @@
-# movieDB
-
-MovieDB App in Google Firebase
+# Razor Reviews
 
 ## Getting Started
 
-- Clone the repo by `git clone https://github.com/time2hack/movieDB.git`
-
-- Navigate to it `cd movieDB`
-
-- Install dependencies `npm install`
-
-- Start the local server `npm run start`
-
-- Open URL Browser `http://localhost:8080`
+* Clone the repo by `git clone https://github.com/melissakendall/razor-reviews.git`
+* Navigate to it `cd razor-reviews`
+* Install dependencies `npm install`
+* Start the local server `npm run start`
+* Open URL Browser `http://localhost:8080`

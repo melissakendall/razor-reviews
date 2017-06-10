@@ -26,7 +26,7 @@ var appRouter = new Router({
     },
     index : {
       path: 'index',
-      templateUrl: 'partials/index.html',
+      templateUrl: 'partials/list.html',
       onEnter: function() {
         var user = Auth.checkLoggedInUser();
         if( user && !window.location.hash.match('/login') ){

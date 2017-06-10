@@ -1,7 +1,7 @@
 {
-  "name": "movie-db",
+  "name": "razor-reviews",
   "version": "0.1.0",
-  "description": "Firebase based app",
+  "description": "Firebase based web application for rating saftey razors.",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --content-base public/",
@@ -10,19 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/time2hack/movieDB.git"
+    "url": "git+https://github.com/melissakendall/razor-reviews.git"
   },
   "keywords": [
     "Firebase",
     "jQuery",
     "Bootstrap"
   ],
-  "author": "Pankaj Patel <patel.pankaj@live.in>",
+  "author": "Melissa Kendall",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/time2hack/movieDB/issues"
+    "url": "https://github.com/melissakendall/razor-reviews/issues"
   },
-  "homepage": "https://github.com/time2hack/movieDB#readme",
+  "homepage": "https://github.com/melissakendall/razor-reviews#readme",
   "dependencies": {
     "bootstrap": "^3.3.6",
     "firebase": "^3.0.5",

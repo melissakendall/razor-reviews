@@ -49,7 +49,6 @@ module.exports = function (Auth, redirect) {
     .on('click', '#register', function(e) {
       e.preventDefault();
       var data = {email: $('#email').val(), password: $('#password').val()}
-      console.log(data);
       $('#email, #password').val('')
       Auth
         .register(data)
@@ -62,7 +61,6 @@ module.exports = function (Auth, redirect) {
     .on('click', '#login', function(e) {
       e.preventDefault();
       var data = {email: $('#email').val(), password: $('#password').val()}
-      console.log(data);
       $('#email, #password').val('')
       login('email', data)
         .then(redirectToHome)

@@ -11487,9 +11487,9 @@ webpackJsonp([1,0],[
 	  init: function (callback) {
 	    var config = {
 	      apiKey: "AIzaSyAj21ouYacBd2shv1X8_YYGfZkrkpXuU5I",
-	      authDomain: "movie-db-1353.firebaseapp.com",
-	      databaseURL: "https://movie-db-1353.firebaseio.com",
-	      storageBucket: "movie-db-1353.appspot.com"
+	      authDomain: "meal-db-1353.firebaseapp.com",
+	      databaseURL: "https://meal-db-1353.firebaseio.com",
+	      storageBucket: "meal-db-1353.appspot.com"
 	    };
 	    Firebase.initializeApp(config);
 
@@ -11599,15 +11599,15 @@ webpackJsonp([1,0],[
 	    // Get a reference to the database service
 	    var database = firebase.database();
 
-	    function saveMovie(movie) {
+	    function savemeal(meal) {
 	      var uid = firebase.auth().currentUser.uid;
 	      // Get a key for a new Post.
-	      var newPostKey = firebase.database().ref().child('movies').push().key;
+	      var newPostKey = firebase.database().ref().child('meals').push().key;
 
-	      // Write the new post's data simultaneously in the movies list and the user's post list.
+	      // Write the new post's data simultaneously in the meals list and the user's post list.
 	      var updates = {};
-	      updates['/movies/' + newPostKey] = movie;
-	      updates['/user-movies/' + uid + '/' + newPostKey] = movie;
+	      updates['/meals/' + newPostKey] = meal;
+	      updates['/user-meals/' + uid + '/' + newPostKey] = meal;
 
 	      return firebase.database().ref().update(updates);
 	    }
@@ -11616,8 +11616,8 @@ webpackJsonp([1,0],[
 	      .off('click', '#add')
 	      .on('click', '#add', function(e) {
 	        var uid = firebase.auth().currentUser.uid;
-	        var movie = {
-	          movieName: $('#movieName').val(),
+	        var meal = {
+	          mealName: $('#mealName').val(),
 	          releaseYear: $('#releaseYear').val(),
 	          generes: $('#generes').val().split(',').map(function(item) {
 	            return item.trim();
@@ -11632,18 +11632,18 @@ webpackJsonp([1,0],[
 	          imdbUrl: $('#imdbUrl').val(),
 	          uid: uid
 	        }
-	        var response = saveMovie(movie);
+	        var response = savemeal(meal);
 	        console.log(response)
 	      })
 	  }
 	}
-	//'{"movieName":"Iron Man","releaseYear":"May, 2008","generes":["Action","Adventure","Sci-Fi"],"duration":"126","directors":["Jon Favreau"],"actors":["Robert Downey Jr.","Gwyneth Paltrow","Terrence Howard","Jeff Bridges"],"imdbUrl":"http://www.imdb.com/title/tt0371746/"}'
+	//'{"mealName":"Iron Man","releaseYear":"May, 2008","generes":["Action","Adventure","Sci-Fi"],"duration":"126","directors":["Jon Favreau"],"actors":["Robert Downey Jr.","Gwyneth Paltrow","Terrence Howard","Jeff Bridges"],"imdbUrl":"http://www.imdb.com/title/tt0371746/"}'
 	/*
-	Object.keys(movie).map(function(key) {
-	  if(typeof movie[key] === 'string'){
-	    document.querySelector('#'+key).setAttribute('value', movie[key])
+	Object.keys(meal).map(function(key) {
+	  if(typeof meal[key] === 'string'){
+	    document.querySelector('#'+key).setAttribute('value', meal[key])
 	  } else {
-	    document.querySelector('#'+key).setAttribute('value', movie[key].join(', '))
+	    document.querySelector('#'+key).setAttribute('value', meal[key].join(', '))
 	  }
 	  return key;
 	})
@@ -11660,7 +11660,7 @@ webpackJsonp([1,0],[
 	  return function (params) {
 	    // Get a reference to the database service
 	    var database = firebase.database();
-	    var query = firebase.database().ref("movies/"+params.id);
+	    var query = firebase.database().ref("meals/"+params.id);
 
 	    //Fire Query
 	    query.once("value").then(fillData)
@@ -11669,7 +11669,7 @@ webpackJsonp([1,0],[
 	    function fillData(snap) {
 	      var data = snap.val();
 	      console.log(data)
-	      $('#movieName').val(data.movieName);
+	      $('#mealName').val(data.mealName);
 	      $('#releaseYear').val(data.releaseYear);
 	      $('#generes').val((data.generes || []).join(', '))
 	      $('#duration').val(data.duration);
@@ -11679,13 +11679,13 @@ webpackJsonp([1,0],[
 	    }
 
 	    //Save function
-	    function saveMovie(movie) {
+	    function savemeal(meal) {
 	      var uid = firebase.auth().currentUser.uid;
 	      var postKey = params.id;
 	      console.log(params, postKey)
 	      var updates = {};
-	      updates['/movies/' + postKey] = movie;
-	      updates['/user-movies/' + uid + '/' + postKey] = movie;
+	      updates['/meals/' + postKey] = meal;
+	      updates['/user-meals/' + uid + '/' + postKey] = meal;
 
 	      return database.ref().update(updates);
 	    }
@@ -11694,8 +11694,8 @@ webpackJsonp([1,0],[
 	      .off('click', '#save')
 	      .on('click', '#save', function(e) {
 	        var uid = firebase.auth().currentUser.uid;
-	        var movie = {
-	          movieName: $('#movieName').val(),
+	        var meal = {
+	          mealName: $('#mealName').val(),
 	          releaseYear: $('#releaseYear').val(),
 	          generes: $('#generes').val().split(',').map(function(item) {
 	            return item.trim();
@@ -11710,19 +11710,19 @@ webpackJsonp([1,0],[
 	          imdbUrl: $('#imdbUrl').val(),
 	          uid: uid
 	        }
-	        var response = saveMovie(movie).then(function(){
+	        var response = savemeal(meal).then(function(){
 	          redirect('list');
 	        });
 	      })
 	  }
 	}
-	//'{"movieName":"Iron Man","releaseYear":"May, 2008","generes":["Action","Adventure","Sci-Fi"],"duration":"126","directors":["Jon Favreau"],"actors":["Robert Downey Jr.","Gwyneth Paltrow","Terrence Howard","Jeff Bridges"],"imdbUrl":"http://www.imdb.com/title/tt0371746/"}'
+	//'{"mealName":"Iron Man","releaseYear":"May, 2008","generes":["Action","Adventure","Sci-Fi"],"duration":"126","directors":["Jon Favreau"],"actors":["Robert Downey Jr.","Gwyneth Paltrow","Terrence Howard","Jeff Bridges"],"imdbUrl":"http://www.imdb.com/title/tt0371746/"}'
 	/*
-	Object.keys(movie).map(function(key) {
-	  if(typeof movie[key] === 'string'){
-	    document.querySelector('#'+key).setAttribute('value', movie[key])
+	Object.keys(meal).map(function(key) {
+	  if(typeof meal[key] === 'string'){
+	    document.querySelector('#'+key).setAttribute('value', meal[key])
 	  } else {
-	    document.querySelector('#'+key).setAttribute('value', movie[key].join(', '))
+	    document.querySelector('#'+key).setAttribute('value', meal[key].join(', '))
 	  }
 	  return key;
 	})
@@ -11783,7 +11783,7 @@ webpackJsonp([1,0],[
 	    // Get a reference to the database service
 	    var markup = '';
 	    var database = firebase.database();
-	    var query = firebase.database().ref("movies").limitToFirst(20);
+	    var query = firebase.database().ref("meals").limitToFirst(20);
 	    query.once("value")
 	      .then(function(snapshot) {
 	        snapshot.forEach(renderSingleSnapshot);
@@ -11792,21 +11792,21 @@ webpackJsonp([1,0],[
 	      });
 
 	    var renderSingleSnapshot = function(childSnapshot) {
-	      var movie = childSnapshot.val();
+	      var meal = childSnapshot.val();
 	      var html = '';
-	      html += '<li class="list-group-item movie">';
+	      html += '<li class="list-group-item meal">';
 	        html += '<div>';
 	        html += '<a class="pull-right" href="#/edit/'+childSnapshot.key+'">Edit</a>';
-	        if( movie.imdbUrl === '' ){
-	          html += '<h5>'+  movie.movieName +'</h5>';
+	        if( meal.imdbUrl === '' ){
+	          html += '<h5>'+  meal.mealName +'</h5>';
 	        } else {
-	          html += '<h5>'+movie.movieName+' <a href="'+movie.imdbUrl+'" target="_blank"><i class="fa fa-imdb" aria-hidden="true"></i></a>' +'</h5>';
+	          html += '<h5>'+meal.mealName+' <a href="'+meal.imdbUrl+'" target="_blank"><i class="fa fa-imdb" aria-hidden="true"></i></a>' +'</h5>';
 	        }
-	        html += '<h6><b>Director: </b>'+movie.directors.join(', ')+'</h6>';
-	        html += '<small><b>Released in: </b>'+(movie.releaseYear)+'<br/>';
-	        html += '<b>Duration: </b>'+durationConvertor(movie.duration)+'<br/>';
+	        html += '<h6><b>Director: </b>'+meal.directors.join(', ')+'</h6>';
+	        html += '<small><b>Released in: </b>'+(meal.releaseYear)+'<br/>';
+	        html += '<b>Duration: </b>'+durationConvertor(meal.duration)+'<br/>';
 	        html += '<b>Actors: </b>';
-	        html += (movie.actors || movie.stars).join(', ') + '</small>';
+	        html += (meal.actors || meal.stars).join(', ') + '</small>';
 	        html += '</div>';
 	      html += '</li>';
 
@@ -11824,8 +11824,8 @@ webpackJsonp([1,0],[
 	  }
 	}
 
-	ListController.toggleStar = function(movieUniqueId){
-	  console.log(movieUniqueId);
+	ListController.toggleStar = function(mealUniqueId){
+	  console.log(mealUniqueId);
 	}
 
 	module.exports = ListController;

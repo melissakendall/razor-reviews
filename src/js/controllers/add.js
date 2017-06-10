@@ -5,15 +5,15 @@ module.exports = function(Auth, redirect) {
     // Get a reference to the database service
     var database = firebase.database();
 
-    function saveMovie(movie) {
+    function saveMeal(meal) {
       var uid = firebase.auth().currentUser.uid;
       // Get a key for a new Post.
-      var newPostKey = firebase.database().ref().child('movies').push().key;
+      var newPostKey = firebase.database().ref().child('meals').push().key;
 
-      // Write the new post's data simultaneously in the movies list and the user's post list.
+      // Write the new post's data simultaneously in both lists and the user's post list.
       var updates = {};
-      updates['/movies/' + newPostKey] = movie;
-      updates['/user-movies/' + uid + '/' + newPostKey] = movie;
+      updates['/meals/' + newPostKey] = meal;
+      updates['/user-meals/' + uid + '/' + newPostKey] = meal;
 
       return firebase.database().ref().update(updates);
     }
@@ -22,35 +22,14 @@ module.exports = function(Auth, redirect) {
       .off('click', '#add')
       .on('click', '#add', function(e) {
         var uid = firebase.auth().currentUser.uid;
-        var movie = {
-          movieName: $('#movieName').val(),
-          releaseYear: $('#releaseYear').val(),
-          generes: $('#generes').val().split(',').map(function(item) {
-            return item.trim();
-          }),
-          duration: $('#duration').val(),
-          directors: $('#directors').val().split(',').map(function(item) {
-            return item.trim();
-          }),
-          actors: $('#actors').val().split(',').map(function(item) {
-            return item.trim();
-          }),
-          imdbUrl: $('#imdbUrl').val(),
+        var meal = {
+          mealName: $('#mealName').val(),
+          notes: $('#notes').val(),
+          ate: $('#ate').val(),
+          date: $('#date').val(),
           uid: uid
         }
-        var response = saveMovie(movie);
-        console.log(response)
+        var response = saveMeal(meal);
       })
   }
 }
-//'{"movieName":"Iron Man","releaseYear":"May, 2008","generes":["Action","Adventure","Sci-Fi"],"duration":"126","directors":["Jon Favreau"],"actors":["Robert Downey Jr.","Gwyneth Paltrow","Terrence Howard","Jeff Bridges"],"imdbUrl":"http://www.imdb.com/title/tt0371746/"}'
-/*
-Object.keys(movie).map(function(key) {
-  if(typeof movie[key] === 'string'){
-    document.querySelector('#'+key).setAttribute('value', movie[key])
-  } else {
-    document.querySelector('#'+key).setAttribute('value', movie[key].join(', '))
-  }
-  return key;
-})
-*/

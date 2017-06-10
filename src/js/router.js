@@ -58,16 +58,6 @@ Router.prototype.enhanceRoute = function (route) {
 }
 
 Router.prototype.add = function(route) {
-  /**
-   * route: {
-   *   path: String,
-   *   template: template string,
-   *   templateUrl: path for ajax,
-   *   onEnter: function(),
-   *   controller: function(),
-   *   onLeave: function()
-   * }
-   */
   this.routes[route.name] = route;
 };
 
