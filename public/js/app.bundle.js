@@ -11486,10 +11486,10 @@ webpackJsonp([1,0],[
 	  auth: null,
 	  init: function (callback) {
 	    var config = {
-	      apiKey: "AIzaSyAj21ouYacBd2shv1X8_YYGfZkrkpXuU5I",
-	      authDomain: "meal-db-1353.firebaseapp.com",
-	      databaseURL: "https://meal-db-1353.firebaseio.com",
-	      storageBucket: "meal-db-1353.appspot.com"
+	      apiKey: "AIzaSyBKQQFa_fUW-2SUww7zX019idRrO2AWYTI",
+	      databaseURL: "https://razor-reviews.firebaseio.com",
+	      authDomain: "razor-reviews.firebaseapp.com",
+	      projectId: "razor-reviews"
 	    };
 	    Firebase.initializeApp(config);
 
