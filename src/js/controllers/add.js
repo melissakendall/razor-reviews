@@ -29,7 +29,9 @@ module.exports = function(Auth, redirect) {
           date: $('#date').val(),
           uid: uid
         }
-        var response = saveMeal(meal);
+        var response = saveMeal(meal).then(function(){
+          redirect('list');
+        });        
       })
   }
 }

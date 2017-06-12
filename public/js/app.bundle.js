@@ -11628,7 +11628,9 @@ webpackJsonp([1,0],[
 	          date: $('#date').val(),
 	          uid: uid
 	        }
-	        var response = saveMeal(meal);
+	        var response = saveMeal(meal).then(function(){
+	          redirect('list');
+	        });        
 	      })
 	  }
 	}
@@ -11683,6 +11685,13 @@ webpackJsonp([1,0],[
 	          redirect('list');
 	        });
 	      })
+	      .on('click', '#delete', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+	        var meal = null;
+	        var response = saveMeal(meal).then(function(){
+	          redirect('list');
+	        });
+	      })      
 	  }
 	}
 

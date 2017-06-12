@@ -44,5 +44,12 @@ module.exports = function(Auth, redirect) {
           redirect('list');
         });
       })
+      .on('click', '#delete', function(e) {
+        var uid = firebase.auth().currentUser.uid;
+        var meal = null;
+        var response = saveMeal(meal).then(function(){
+          redirect('list');
+        });
+      })      
   }
 }
