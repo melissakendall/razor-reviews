@@ -70,6 +70,14 @@ webpackJsonp([1,0],[
 	    list : {
 	      path: 'list',
 	      templateUrl: 'partials/list.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },      
 	      controller: __webpack_require__(15)(Auth, redirect)
 	    }
 	  }

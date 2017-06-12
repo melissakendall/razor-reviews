@@ -66,6 +66,14 @@ var appRouter = new Router({
     list : {
       path: 'list',
       templateUrl: 'partials/list.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },      
       controller: require('./controllers/list')(Auth, redirect)
     }
   }
