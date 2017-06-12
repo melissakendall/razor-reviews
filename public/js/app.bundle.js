@@ -11707,7 +11707,7 @@ webpackJsonp([1,0],[
 	    //Redirect to Home
 	    var redirectToHome = function(user) {
 	      if(user){
-	        redirect('index');
+	        redirect('list');
 	      }
 	    }
 
@@ -11792,7 +11792,7 @@ webpackJsonp([1,0],[
 	    //Redirect to Home
 	    var redirectToHome = function(user) {
 	      if(user){
-	        redirect('index');
+	        redirect('list');
 	      }
 	    }
 

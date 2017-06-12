@@ -6,7 +6,7 @@ module.exports = function (Auth, redirect) {
     //Redirect to Home
     var redirectToHome = function(user) {
       if(user){
-        redirect('index');
+        redirect('list');
       }
     }
 
