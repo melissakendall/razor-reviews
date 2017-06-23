@@ -27,6 +27,7 @@ module.exports = function(Auth, redirect) {
           notes: $('#notes').val(),
           ate: $('#ate').val(),
           date: $('#date').val(),
+          picture: $('#picture').val(),
           uid: uid
         }
         var response = saveMeal(meal).then(function(){

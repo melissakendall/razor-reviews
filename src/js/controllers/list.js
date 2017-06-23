@@ -21,15 +21,21 @@ var ListController = function(Auth, redirect) {
       var html = '';
       
       html += '<li class="list-group-item meal">';
+      html +=  '<div class="row">';
+      html +=   '<div class="col-md-3">';
 
-        html += '<div>';
-        html += '<a class="pull-right" href="#/edit/'+childSnapshot.key+'">Edit</a>';
-        html += '<h4>'+  meal.mealName +'</h4>';
-        if(meal.date) {
-          html += '<h5>'+  meal.date +'</h5>';
-        }
-        html += '</div>';
-      
+      if(meal.picture)
+        html +=     '<img src="'+meal.picture+'" style="max-height:70px;max-width:100px"></img>';
+
+      html +=   '</div>';
+      html +=   '<div class="col-md-7">';
+      html +=     '<h4>'+  meal.mealName +'</h4>';
+      html +=     '<h5>'+  meal.date +'</h5>';
+      html +=   '</div>';
+      html +=   '<div class="col-md-2">';
+      html +=     '<a class="pull-right" href="#/edit/'+childSnapshot.key+'">Edit</a>';        
+      html +=   '</div>';
+      html +=  '</div>';
       html += '</li>';
 
       markup += html;
