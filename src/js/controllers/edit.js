@@ -18,6 +18,7 @@ module.exports = function(Auth, redirect) {
       $('#date').val(data.date);
       $('#picture').val(data.picture);
       $('#picture-display').attr('src', data.picture);
+      $('#rating').val(data.rating);
     }
 
     //Save function
@@ -41,6 +42,7 @@ module.exports = function(Auth, redirect) {
           ate: $('#ate').val(),
           date: $('#date').val(),
           picture: $('#picture').val(),
+          rating: $('#rating').val(),
           uid: uid
         }
         var response = saveMeal(meal).then(function(){

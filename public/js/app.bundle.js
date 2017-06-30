@@ -11635,6 +11635,7 @@ webpackJsonp([1,0],[
 	          ate: $('#ate').val(),
 	          date: $('#date').val(),
 	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
 	          uid: uid
 	        }
 	        var response = saveMeal(meal).then(function(){
@@ -11643,6 +11644,8 @@ webpackJsonp([1,0],[
 	      })
 	  }
 	}
+
+
 
 /***/ }),
 /* 13 */
@@ -11668,6 +11671,7 @@ webpackJsonp([1,0],[
 	      $('#date').val(data.date);
 	      $('#picture').val(data.picture);
 	      $('#picture-display').attr('src', data.picture);
+	      $('#rating').val(data.rating);
 	    }
 
 	    //Save function
@@ -11691,6 +11695,7 @@ webpackJsonp([1,0],[
 	          ate: $('#ate').val(),
 	          date: $('#date').val(),
 	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
 	          uid: uid
 	        }
 	        var response = saveMeal(meal).then(function(){
@@ -11783,7 +11788,17 @@ webpackJsonp([1,0],[
 	      html +=   '</div>';
 	      html +=   '<div class="col-md-7">';
 	      html +=     '<h4>'+  meal.mealName +'</h4>';
-	      html +=     '<h5>'+  meal.date +'</h5>';
+
+	      if(meal.rating) {
+
+	        for(var i = 0; i < 5; i++) {
+	          if(i < meal.rating)
+	            html +=     '<i class="fa fa-star star-rating" aria-hidden="true"></i>';
+	          else
+	            html +=     '<i class="fa fa-star-o star-rating" aria-hidden="true"></i>';            
+	        }
+	      }
+
 	      html +=   '</div>';
 	      html +=   '<div class="col-md-2">';
 	      html +=     '<a class="pull-right" href="#/edit/'+childSnapshot.key+'">Edit</a>';        

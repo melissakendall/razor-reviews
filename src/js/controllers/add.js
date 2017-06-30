@@ -28,6 +28,7 @@ module.exports = function(Auth, redirect) {
           ate: $('#ate').val(),
           date: $('#date').val(),
           picture: $('#picture').val(),
+          rating: $('#rating').val(),
           uid: uid
         }
         var response = saveMeal(meal).then(function(){
@@ -36,3 +37,4 @@ module.exports = function(Auth, redirect) {
       })
   }
 }
+
