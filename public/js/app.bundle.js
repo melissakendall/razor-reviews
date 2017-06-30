@@ -11653,6 +11653,7 @@ webpackJsonp([1,0],[
 
 	var $ = __webpack_require__(1);
 	var firebase = __webpack_require__(3);
+
 	module.exports = function(Auth, redirect) {
 	  return function (params) {
 	    // Get a reference to the database service
@@ -11759,16 +11760,39 @@ webpackJsonp([1,0],[
 	var firebase = __webpack_require__(3);
 	var $ = __webpack_require__(1);
 
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return decodeURI(results[1]) || 0;
+	    }
+	}
+
 	var ListController = function(Auth, redirect) {
 	  return function () {
 	    var userId = firebase.auth().currentUser.uid;
 
+	    //Extract sorting type
+	    let sortMethod = "mealName";
+	    
+	    if($.urlParam("sort")) {
+	      sortMethod = $.urlParam("sort");
+	    }
+
+	    //Sort button handling
+	    $(".sort-button").click(function() {
+	      window.location.href = "/#/list/?sort=" + $(this).attr("value");  
+	    });
+
 	    // Get a reference to the database service
 	    var markup = '';
 	    var database = firebase.database();
-	    var query = firebase.database().ref("meals").limitToFirst(20);
+	    var query = firebase.database().ref("meals").orderByChild(sortMethod);
 	    query.once("value")
 	      .then(function(snapshot) {
+	        //showMore = Object.keys(snapshot.val()).length > 10;
 	        snapshot.forEach(renderSingleSnapshot);
 	      }).then(function(){
 	        $(document).find('#list').html(markup);
