@@ -24,7 +24,7 @@ var ListController = function(Auth, redirect) {
 
     //Sort button handling
     $(".sort-button").click(function() {
-      window.location.href = "/#/list/?sort=" + $(this).attr("value");  
+      window.location.href = window.location.pathname + "#/list/?sort=" + $(this).attr("value");  
     });
 
     //////////////// Searching //////////////////////////////////////
@@ -36,7 +36,7 @@ var ListController = function(Auth, redirect) {
 
     //Sort button handling
     $("#search-form").submit(function() {
-      window.location.href = "/#/list/?sort=" + sortMethod + "&search=" + $("#search-input").val();  
+      window.location.href = window.location.pathname + "#/list/?sort=" + sortMethod + "&search=" + $("#search-input").val();  
     });
 
 
