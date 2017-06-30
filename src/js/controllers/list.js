@@ -15,7 +15,7 @@ var ListController = function(Auth, redirect) {
   return function () {
     var userId = firebase.auth().currentUser.uid;
 
-    //Extract sorting type
+    //////////////// Sorting //////////////////////////////////////
     let sortMethod = "mealName";
     
     if($.urlParam("sort")) {
@@ -27,10 +27,31 @@ var ListController = function(Auth, redirect) {
       window.location.href = "/#/list/?sort=" + $(this).attr("value");  
     });
 
+    //////////////// Searching //////////////////////////////////////
+    let searchValue = false;
+    
+    if($.urlParam("search")) {
+      searchValue = $.urlParam("search");
+    }
+
+    //Sort button handling
+    $("#search-form").submit(function() {
+      window.location.href = "/#/list/?sort=" + sortMethod + "&search=" + $("#search-input").val();  
+    });
+
+
     // Get a reference to the database service
     var markup = '';
     var database = firebase.database();
-    var query = firebase.database().ref("meals").orderByChild(sortMethod);
+    var query;
+    
+    if(searchValue) {
+      query = firebase.database().ref("meals").orderByChild(sortMethod).equalTo(searchValue);
+    } 
+    else {
+      query = firebase.database().ref("meals").orderByChild(sortMethod);
+    }
+
     query.once("value")
       .then(function(snapshot) {
         //showMore = Object.keys(snapshot.val()).length > 10;
