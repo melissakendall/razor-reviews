@@ -1,4 +1,4 @@
-# Razor Reviews
+# Personal Reviews
 
 ## Before You Begin
 
