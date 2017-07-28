@@ -66,13 +66,7 @@ var ListController = function(Auth, redirect) {
       
       html += '<li class="list-group-item meal">';
       html +=  '<div class="row">';
-      html +=   '<div class="col-md-3">';
-
-      if(meal.picture)
-        html +=     '<img src="'+meal.picture+'" style="max-height:70px;max-width:100px"></img>';
-
-      html +=   '</div>';
-      html +=   '<div class="col-md-7">';
+      html +=   '<div class="col-md-10">';
       html +=     '<h4>'+  meal.mealName +'</h4>';
 
       if(meal.rating) {
