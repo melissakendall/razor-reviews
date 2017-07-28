@@ -9,7 +9,7 @@ var redirect = function(to) {
 
 var appRouter = new Router({
   mountPoint: '#root',
-  indexRoute: 'index',
+  indexRoute: 'list',
   routes: {
     login : {
       path: 'login',
@@ -23,19 +23,6 @@ var appRouter = new Router({
         }
       },
       controller: require('./controllers/login')(Auth, redirect)
-    },
-    index : {
-      path: 'index',
-      templateUrl: 'partials/list.html',
-      onEnter: function() {
-        var user = Auth.checkLoggedInUser();
-        if( user && !window.location.hash.match('/login') ){
-          return true;
-        } else {
-          return 'login';
-        }
-      },
-      controller: require('./controllers/index')(Auth, redirect)
     },
     add : {
       path: 'add',
