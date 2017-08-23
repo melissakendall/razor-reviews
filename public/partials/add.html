@@ -1,7 +1,7 @@
 <div class=" marketing">
   <form class="form" method="GET" >
-    <h4 class="with-seperator">Add meal</h4>
-    <h4 class="with-seperator edit-actors hidden">Edit meal</h4>
+    <h4 class="with-seperator"></h4>
+    <h4 class="with-seperator edit-actors hidden"></h4>
     <div class="form-group row">
 
       <label for="mealName" class="col-sm-3 control-label">Restaurant</label>
@@ -33,8 +33,11 @@
 
     <div class="form-group row">
       <label for="picture" class="col-sm-3 control-label">Picture</label>
-      <div class="col-sm-9">
-        <input type="text" class="form-control" id="picture" placeholder="http://images.com">
+      <div class="col-sm-8">
+        <input type="file" class="form-control" name="image" id="picture" placeholder="http://images.com">
+      </div>
+      <div class="col-sm-1">
+        <button type="button" value="uploadImage" id="uploadImage" class="btn btn-primary-outline sort-button">Upload</button>      
       </div>
     </div>
 

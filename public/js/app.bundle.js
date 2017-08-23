@@ -4,7 +4,7 @@ webpackJsonp([1,0],[
 
 	var $ = __webpack_require__(1);
 	var Auth = __webpack_require__(11)
-	var Router = __webpack_require__(17);
+	var Router = __webpack_require__(16);
 
 	//Redirect to some Page or URL
 	var redirect = function(to) {
@@ -13,7 +13,7 @@ webpackJsonp([1,0],[
 
 	var appRouter = new Router({
 	  mountPoint: '#root',
-	  indexRoute: 'index',
+	  indexRoute: 'list',
 	  routes: {
 	    login : {
 	      path: 'login',
@@ -26,20 +26,7 @@ webpackJsonp([1,0],[
 	          return 'index';
 	        }
 	      },
-	      controller: __webpack_require__(16)(Auth, redirect)
-	    },
-	    index : {
-	      path: 'index',
-	      templateUrl: 'partials/list.html',
-	      onEnter: function() {
-	        var user = Auth.checkLoggedInUser();
-	        if( user && !window.location.hash.match('/login') ){
-	          return true;
-	        } else {
-	          return 'login';
-	        }
-	      },
-	      controller: __webpack_require__(14)(Auth, redirect)
+	      controller: __webpack_require__(15)(Auth, redirect)
 	    },
 	    add : {
 	      path: 'add',
@@ -78,7 +65,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },      
-	      controller: __webpack_require__(15)(Auth, redirect)
+	      controller: __webpack_require__(14)(Auth, redirect)
 	    }
 	  }
 	})
@@ -11607,10 +11594,22 @@ webpackJsonp([1,0],[
 
 	var $ = __webpack_require__(1);
 	var firebase = __webpack_require__(3);
+
 	module.exports = function(Auth, redirect) {
 	  return function () {
 	    // Get a reference to the database service
 	    var database = firebase.database();
+	    var FILE_URL = '';
+	    var IMGUR_API_KEY = '';
+
+	    //Still insecure, but better then hardcoding!
+	    var query = firebase.database().ref('secrets/4c149f04-c381-457');
+	    query.once("value").then(fillData);
+
+	    function fillData(snap) {
+	      var data = snap.val();
+	      IMGUR_API_KEY = data.secret;
+	    }
 
 	    function saveMeal(meal) {
 	      var uid = firebase.auth().currentUser.uid;
@@ -11626,15 +11625,46 @@ webpackJsonp([1,0],[
 	    }
 
 	    $(document)
+	      .on('click', '#uploadImage', function(e) {
+
+	        var fileData = $('#picture')[0].files[0];
+	        
+	        if(!fileData)
+	          return;
+
+	        $.ajax({
+	          async: true,
+	          url: 'https://api.imgur.com/3/image',
+	          processData: false,
+	          method: 'POST',
+	          headers: {
+	            Authorization: 'Client-ID ' + IMGUR_API_KEY,
+	            Accept: 'application/json'
+	          },
+	          data: fileData,
+	          success: function(result) {
+	            FILE_URL = result.data.link;
+	            e.target.classList.remove("btn-danger");
+	            e.target.classList.add("btn-success");
+	          },
+	          error: function(err) {
+	            console.log(err);
+	            e.target.classList.add("btn-danger");
+	            e.target.classList.remove("btn-success");
+	          }
+	        });
+
+	      })
 	      .off('click', '#add')
 	      .on('click', '#add', function(e) {
 	        var uid = firebase.auth().currentUser.uid;
+
 	        var meal = {
 	          mealName: $('#mealName').val(),
 	          notes: $('#notes').val(),
 	          ate: $('#ate').val(),
 	          date: $('#date').val(),
-	          picture: $('#picture').val(),
+	          picture: FILE_URL,
 	          rating: $('#rating').val(),
 	          uid: uid
 	        }
@@ -11717,46 +11747,6 @@ webpackJsonp([1,0],[
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(1);
-
-	module.exports = function (Auth, redirect) {
-	  return function(){
-	    console.log('home controller')
-	    //Redirect to Home
-	    var redirectToHome = function(user) {
-	      if(user){
-	        redirect('list');
-	      }
-	    }
-
-	    //Redirect to Login
-	    var redirectToLogin = function(user) {
-	      if(!user){
-	        redirect('login');
-	      }
-	    }
-
-	    $('.logout-link').css('display', 'block');
-	    $('.login-link').hide();
-
-	    //Logout Button
-	    $(document)
-	      .off('click', '.logout-link')
-	      .on('click', '.logout-link', function (e) {
-	        if( Auth.logout() ){
-	          $('.login-link').css('display', 'block');
-	          $('.logout-link').hide();
-	          redirectToLogin();
-	        }
-	      })
-	  }
-	}
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	var firebase = __webpack_require__(3);
 	var $ = __webpack_require__(1);
 
@@ -11783,7 +11773,7 @@ webpackJsonp([1,0],[
 
 	    //Sort button handling
 	    $(".sort-button").click(function() {
-	      window.location.href = "/#/list/?sort=" + $(this).attr("value");  
+	      window.location.href = window.location.pathname + "#/list/?sort=" + $(this).attr("value");  
 	    });
 
 	    //////////////// Searching //////////////////////////////////////
@@ -11795,7 +11785,7 @@ webpackJsonp([1,0],[
 
 	    //Sort button handling
 	    $("#search-form").submit(function() {
-	      window.location.href = "/#/list/?sort=" + sortMethod + "&search=" + $("#search-input").val();  
+	      window.location.href = window.location.pathname + "#/list/?sort=" + sortMethod + "&search=" + $("#search-input").val();  
 	    });
 
 
@@ -11825,13 +11815,7 @@ webpackJsonp([1,0],[
 	      
 	      html += '<li class="list-group-item meal">';
 	      html +=  '<div class="row">';
-	      html +=   '<div class="col-md-3">';
-
-	      if(meal.picture)
-	        html +=     '<img src="'+meal.picture+'" style="max-height:70px;max-width:100px"></img>';
-
-	      html +=   '</div>';
-	      html +=   '<div class="col-md-7">';
+	      html +=   '<div class="col-md-10">';
 	      html +=     '<h4>'+  meal.mealName +'</h4>';
 
 	      if(meal.rating) {
@@ -11860,7 +11844,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
@@ -11935,7 +11919,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
