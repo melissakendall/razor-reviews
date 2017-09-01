@@ -70,6 +70,7 @@ module.exports = function(Auth, redirect) {
           date: $('#date').val(),
           picture: FILE_URL,
           rating: $('#rating').val(),
+          uses: $('#uses').val(),          
           uid: uid
         }
         var response = saveRazor(razor).then(function(){

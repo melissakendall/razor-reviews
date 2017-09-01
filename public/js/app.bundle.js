@@ -12031,6 +12031,7 @@ webpackJsonp([1,0],[
 	          date: $('#date').val(),
 	          picture: FILE_URL,
 	          rating: $('#rating').val(),
+	          uses: $('#uses').val(),          
 	          uid: uid
 	        }
 	        var response = saveRazor(razor).then(function(){
@@ -12068,6 +12069,7 @@ webpackJsonp([1,0],[
 	      $('#picture').val(data.picture);
 	      $('#picture-display').attr('src', data.picture);
 	      $('#rating').val(data.rating);
+	      $('#uses').val(data.uses);
 	    }
 
 	    //Save function
@@ -12090,6 +12092,7 @@ webpackJsonp([1,0],[
 	          date: $('#date').val(),
 	          picture: $('#picture').val(),
 	          rating: $('#rating').val(),
+	          uses: $('#uses').val(),          
 	          uid: uid
 	        }
 	        var response = saveRazor(razor).then(function(){
@@ -12137,15 +12140,13 @@ webpackJsonp([1,0],[
 	      html +=  '<div class="row">';
 	      html +=   '<div class="col-md-10">';
 	      html +=     '<h4>'+  razor.razorName +'</h4>';
+	      html +=     '<p> ' + razor.uses + ' Uses</p>';
 
-	      if(razor.rating) {
-
-	        for(var i = 0; i < 5; i++) {
-	          if(i < razor.rating)
-	            html +=     '<i class="fa fa-star star-rating" aria-hidden="true"></i>';
-	          else
-	            html +=     '<i class="fa fa-star-o star-rating" aria-hidden="true"></i>';            
-	        }
+	      for(var i = 0; i < 5; i++) {
+	        if(i < razor.rating)
+	          html +=     '<i class="fa fa-star star-rating" aria-hidden="true"></i>';
+	        else
+	          html +=     '<i class="fa fa-star-o star-rating" aria-hidden="true"></i>';            
 	      }
 
 	      html +=   '</div>';

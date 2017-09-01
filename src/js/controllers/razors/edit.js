@@ -20,6 +20,7 @@ module.exports = function(Auth, redirect) {
       $('#picture').val(data.picture);
       $('#picture-display').attr('src', data.picture);
       $('#rating').val(data.rating);
+      $('#uses').val(data.uses);
     }
 
     //Save function
@@ -42,6 +43,7 @@ module.exports = function(Auth, redirect) {
           date: $('#date').val(),
           picture: $('#picture').val(),
           rating: $('#rating').val(),
+          uses: $('#uses').val(),          
           uid: uid
         }
         var response = saveRazor(razor).then(function(){
