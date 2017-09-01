@@ -9,8 +9,8 @@ var redirect = function(to) {
 
 var appRouter = new Router({
   mountPoint: '#root',
-  indexRoute: 'list',
-  routes: {
+  indexRoute: 'selectCategory',
+  routes: {  
     login : {
       path: 'login',
       templateUrl: 'partials/login.html',
@@ -19,14 +19,14 @@ var appRouter = new Router({
         if( !user && window.location.hash.match('/login') ){
           return true;
         } else {
-          return 'index';
+          return 'selectCategory';
         }
       },
       controller: require('./controllers/login')(Auth, redirect)
     },
-    add : {
-      path: 'add',
-      templateUrl: 'partials/add.html',
+    selectCategory : {
+      path: 'selectCategory',
+      templateUrl: 'partials/selectCategory.html',
       onEnter: function() {
         var user = Auth.checkLoggedInUser();
         if( user && !window.location.hash.match('/login') ){
@@ -35,24 +35,11 @@ var appRouter = new Router({
           return 'login';
         }
       },
-      controller: require('./controllers/add')(Auth, redirect)
+      controller: require('./controllers/selectCategory')(Auth, redirect)
     },
-    edit : {
-      path: 'edit/:id',
-      templateUrl: 'partials/edit.html',
-      onEnter: function() {
-        var user = Auth.checkLoggedInUser();
-        if( user && !window.location.hash.match('/login') ){
-          return true;
-        } else {
-          return 'login';
-        }
-      },
-      controller: require('./controllers/edit')(Auth, redirect)
-    },
-    list : {
-      path: 'list',
-      templateUrl: 'partials/list.html',
+    listMeals : {
+      path: 'meals/list',
+      templateUrl: 'partials/meals/list.html',
       onEnter: function() {
         var user = Auth.checkLoggedInUser();
         if( user && !window.location.hash.match('/login') ){
@@ -61,7 +48,72 @@ var appRouter = new Router({
           return 'login';
         }
       },      
-      controller: require('./controllers/list')(Auth, redirect)
+      controller: require('./controllers/meals/list')(Auth, redirect)
+    }, 
+    addMeal : {
+      path: 'meals/add',
+      templateUrl: 'partials/meals/add.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/meals/add')(Auth, redirect)
+    },    
+    editMeal : {
+      path: 'meals/:id/edit',
+      templateUrl: 'partials/meals/edit.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/meals/edit')(Auth, redirect)
+    },
+    listRazors: {
+      path: 'razors/list',
+      templateUrl: 'partials/razors/list.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },      
+      controller: require('./controllers/razors/list')(Auth, redirect)
+    },    
+    addRazor : {
+      path: 'razors/add',
+      templateUrl: 'partials/razors/add.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/razors/add')(Auth, redirect)
+    },    
+    editRazor : {
+      path: 'razors/:id/edit',
+      templateUrl: 'partials/razors/edit.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/razors/edit')(Auth, redirect)
     }
   }
 })
@@ -73,6 +125,18 @@ $(document).ready(function() {
   //Initialize the Firebase App
   Auth.init(function() {
 
+    //Logout Button
+    $(document).on('click', '.logout-link', function (e) {
+      
+      //Logout, switch displays
+      Auth.logout();
+
+      $('.login-link').css('display', 'block');
+      $('.logout-link').hide();
+
+      redirectToLogin(); 
+    });
+
     var user = Auth.checkLoggedInUser();
 
     if( user ){
@@ -82,6 +146,7 @@ $(document).ready(function() {
       $('.login-link').css('display', 'block');
       $('.logout-link').hide();
     }
+
     appRouter.listen();
   });
 })

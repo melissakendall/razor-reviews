@@ -43,6 +43,7 @@ module.exports = {
         return false;
       })
   },
+  
   login: function (type, data) {
     var auth = Firebase.auth();
     var request = null;
@@ -51,7 +52,7 @@ module.exports = {
         request = auth.signInWithEmailAndPassword(data.email, data.password)
         break;
       }
-
+      
       case 'facebook': {
         var provider = new Firebase.auth.FacebookAuthProvider();
         provider.addScope('public_profile');
@@ -84,6 +85,7 @@ module.exports = {
         break;
       }
     }
+
     if( request !== null ){
       return request
         .then(this.resultHandler)

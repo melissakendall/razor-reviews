@@ -123,3 +123,7 @@ label.star:before {
 .star-rating {
   color: #FFD700;
 }
+
+#categories {
+  padding-top: 20px;
+}

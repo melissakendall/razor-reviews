@@ -15,30 +15,12 @@ var ListController = function(Auth, redirect) {
   return function () {
     var userId = firebase.auth().currentUser.uid;
 
-    //////////////// Sorting //////////////////////////////////////
     let sortMethod = "mealName";
-    
-    if($.urlParam("sort")) {
-      sortMethod = $.urlParam("sort");
-    }
-
-    //Sort button handling
-    $(".sort-button").click(function() {
-      window.location.href = window.location.pathname + "#/list/?sort=" + $(this).attr("value");  
-    });
-
-    //////////////// Searching //////////////////////////////////////
     let searchValue = false;
     
     if($.urlParam("search")) {
       searchValue = $.urlParam("search");
     }
-
-    //Sort button handling
-    $("#search-form").submit(function() {
-      window.location.href = window.location.pathname + "#/list/?sort=" + sortMethod + "&search=" + $("#search-input").val();  
-    });
-
 
     // Get a reference to the database service
     var markup = '';
@@ -81,7 +63,7 @@ var ListController = function(Auth, redirect) {
 
       html +=   '</div>';
       html +=   '<div class="col-md-2">';
-      html +=     '<a class="pull-right" href="#/edit/'+childSnapshot.key+'">Edit</a>';        
+      html +=     '<a class="pull-right" href="#/meals/'+childSnapshot.key+'/edit">Edit</a>';        
       html +=   '</div>';
       html +=  '</div>';
       html += '</li>';

@@ -21,19 +21,9 @@ module.exports = function (Auth, redirect) {
       }
     }
 
-    $('.logout-link').css('display', 'block');
+    $('.logout-link').hide();
     $('.login-link').hide();
-
-    //Logout Button
-    $(document)
-    .off('click', '.logout-link')
-    .on('click', '.logout-link', function (e) {
-      if( Auth.logout() ){
-        $('.login-link').css('display', 'block');
-        $('.logout-link').hide();
-        redirectToLogin();
-      }
-    })
+    $('.nav-item').hide();
 
     //Social and Anonymous Auth Scheme Login
     $(document)

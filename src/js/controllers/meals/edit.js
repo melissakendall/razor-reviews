@@ -5,7 +5,8 @@ module.exports = function(Auth, redirect) {
   return function (params) {
     // Get a reference to the database service
     var database = firebase.database();
-    var query = firebase.database().ref("user-meals/"+params.id);
+    var uid = firebase.auth().currentUser.uid;
+    var query = firebase.database().ref("user-meals/" + uid + "/" + params.id);
 
     //Fire Query
     query.once("value").then(fillData)
@@ -46,14 +47,14 @@ module.exports = function(Auth, redirect) {
           uid: uid
         }
         var response = saveMeal(meal).then(function(){
-          redirect('list');
+          redirect('meals/list');
         });
       })
       .on('click', '#delete', function(e) {
         var uid = firebase.auth().currentUser.uid;
         var meal = null;
         var response = saveMeal(meal).then(function(){
-          redirect('list');
+          redirect('meals/list');
         });
       })      
   }
