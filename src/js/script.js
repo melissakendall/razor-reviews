@@ -114,7 +114,88 @@ var appRouter = new Router({
         }
       },
       controller: require('./controllers/razors/edit')(Auth, redirect)
-    }
+    },
+
+    listBooks: {
+      path: 'books/list',
+      templateUrl: 'partials/books/list.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },      
+      controller: require('./controllers/books/list')(Auth, redirect)
+    },    
+    addBooks : {
+      path: 'books/add',
+      templateUrl: 'partials/books/add.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/books/add')(Auth, redirect)
+    },    
+    editBooks : {
+      path: 'books/:id/edit',
+      templateUrl: 'partials/books/edit.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/books/edit')(Auth, redirect)
+    },
+
+    listGames: {
+      path: 'games/list',
+      templateUrl: 'partials/games/list.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },      
+      controller: require('./controllers/games/list')(Auth, redirect)
+    },    
+    addGames : {
+      path: 'games/add',
+      templateUrl: 'partials/games/add.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/games/add')(Auth, redirect)
+    },    
+    editGames : {
+      path: 'games/:id/edit',
+      templateUrl: 'partials/games/edit.html',
+      onEnter: function() {
+        var user = Auth.checkLoggedInUser();
+        if( user && !window.location.hash.match('/login') ){
+          return true;
+        } else {
+          return 'login';
+        }
+      },
+      controller: require('./controllers/games/edit')(Auth, redirect)
+    }    
+
   }
 })
 

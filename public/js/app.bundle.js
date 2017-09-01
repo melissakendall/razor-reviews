@@ -4,7 +4,7 @@ webpackJsonp([1,0],[
 
 	var $ = __webpack_require__(1);
 	var Auth = __webpack_require__(11)
-	var Router = __webpack_require__(20);
+	var Router = __webpack_require__(26);
 
 	//Redirect to some Page or URL
 	var redirect = function(to) {
@@ -26,7 +26,7 @@ webpackJsonp([1,0],[
 	          return 'selectCategory';
 	        }
 	      },
-	      controller: __webpack_require__(12)(Auth, redirect)
+	      controller: __webpack_require__(18)(Auth, redirect)
 	    },
 	    selectCategory : {
 	      path: 'selectCategory',
@@ -39,7 +39,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },
-	      controller: __webpack_require__(19)(Auth, redirect)
+	      controller: __webpack_require__(25)(Auth, redirect)
 	    },
 	    listMeals : {
 	      path: 'meals/list',
@@ -52,7 +52,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },      
-	      controller: __webpack_require__(15)(Auth, redirect)
+	      controller: __webpack_require__(21)(Auth, redirect)
 	    }, 
 	    addMeal : {
 	      path: 'meals/add',
@@ -65,7 +65,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },
-	      controller: __webpack_require__(13)(Auth, redirect)
+	      controller: __webpack_require__(19)(Auth, redirect)
 	    },    
 	    editMeal : {
 	      path: 'meals/:id/edit',
@@ -78,7 +78,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },
-	      controller: __webpack_require__(14)(Auth, redirect)
+	      controller: __webpack_require__(20)(Auth, redirect)
 	    },
 	    listRazors: {
 	      path: 'razors/list',
@@ -91,7 +91,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },      
-	      controller: __webpack_require__(18)(Auth, redirect)
+	      controller: __webpack_require__(24)(Auth, redirect)
 	    },    
 	    addRazor : {
 	      path: 'razors/add',
@@ -104,7 +104,7 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },
-	      controller: __webpack_require__(16)(Auth, redirect)
+	      controller: __webpack_require__(22)(Auth, redirect)
 	    },    
 	    editRazor : {
 	      path: 'razors/:id/edit',
@@ -117,8 +117,89 @@ webpackJsonp([1,0],[
 	          return 'login';
 	        }
 	      },
+	      controller: __webpack_require__(23)(Auth, redirect)
+	    },
+
+	    listBooks: {
+	      path: 'books/list',
+	      templateUrl: 'partials/books/list.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },      
+	      controller: __webpack_require__(14)(Auth, redirect)
+	    },    
+	    addBooks : {
+	      path: 'books/add',
+	      templateUrl: 'partials/books/add.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },
+	      controller: __webpack_require__(12)(Auth, redirect)
+	    },    
+	    editBooks : {
+	      path: 'books/:id/edit',
+	      templateUrl: 'partials/books/edit.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },
+	      controller: __webpack_require__(13)(Auth, redirect)
+	    },
+
+	    listGames: {
+	      path: 'games/list',
+	      templateUrl: 'partials/games/list.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },      
 	      controller: __webpack_require__(17)(Auth, redirect)
-	    }
+	    },    
+	    addGames : {
+	      path: 'games/add',
+	      templateUrl: 'partials/games/add.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },
+	      controller: __webpack_require__(15)(Auth, redirect)
+	    },    
+	    editGames : {
+	      path: 'games/:id/edit',
+	      templateUrl: 'partials/games/edit.html',
+	      onEnter: function() {
+	        var user = Auth.checkLoggedInUser();
+	        if( user && !window.location.hash.match('/login') ){
+	          return true;
+	        } else {
+	          return 'login';
+	        }
+	      },
+	      controller: __webpack_require__(16)(Auth, redirect)
+	    }    
+
 	  }
 	})
 
@@ -11660,6 +11741,481 @@ webpackJsonp([1,0],[
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
+	var firebase = __webpack_require__(2);
+
+	module.exports = function(Auth, redirect) {
+	  return function () {
+	    // Get a reference to the database service
+	    var database = firebase.database();
+	    var FILE_URL = '';
+	    var IMGUR_API_KEY = '';
+
+	    //Still insecure, but better then hardcoding!
+	    var query = firebase.database().ref('secrets/4c149f04-c381-457');
+	    query.once("value").then(fillData);
+
+	    function fillData(snap) {
+	      var data = snap.val();
+	      IMGUR_API_KEY = data.secret;
+	    }
+
+	    function saveBook(book) {
+	      var uid = firebase.auth().currentUser.uid;
+	      // Get a key for a new Post.
+	      var newPostKey = firebase.database().ref().child('user-books/' + uid).push().key;
+
+	      // Write the new post's data simultaneously in both lists and the user's post list.
+	      var updates = {};
+	      updates['/user-books/' + uid + '/' + newPostKey] = book;
+
+	      return firebase.database().ref().update(updates);
+	    }
+
+	    $(document)
+	      .on('click', '#uploadImage', function(e) {
+
+	        var fileData = $('#picture')[0].files[0];
+	        
+	        if(!fileData)
+	          return;
+
+	        $.ajax({
+	          async: true,
+	          url: 'https://api.imgur.com/3/image',
+	          processData: false,
+	          method: 'POST',
+	          headers: {
+	            Authorization: 'Client-ID ' + IMGUR_API_KEY,
+	            Accept: 'application/json'
+	          },
+	          data: fileData,
+	          success: function(result) {
+	            FILE_URL = result.data.link;
+	            e.target.classList.remove("btn-danger");
+	            e.target.classList.add("btn-success");
+	          },
+	          error: function(err) {
+	            console.log(err);
+	            e.target.classList.add("btn-danger");
+	            e.target.classList.remove("btn-success");
+	          }
+	        });
+
+	      })
+	      .off('click', '#add')
+	      .on('click', '#add', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+
+	        var book = {
+	          bookName: $('#bookName').val(),
+	          isbn: $('#isbn').val(),          
+	          notes: $('#notes').val(),
+	          date: $('#date').val(),
+	          picture: FILE_URL,
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveBook(book).then(function(){
+	          redirect('books/list');
+	        });        
+	      })
+	  }
+	}
+
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(1);
+	var firebase = __webpack_require__(2);
+
+	module.exports = function(Auth, redirect) {
+	  return function (params) {
+	    // Get a reference to the database service
+	    var database = firebase.database();
+	    var uid = firebase.auth().currentUser.uid;
+	    var query = firebase.database().ref("user-books/" + uid + "/" + params.id);
+
+	    //Fire Query
+	    query.once("value").then(fillData)
+
+	    //Fill The data
+	    function fillData(snap) {
+	      var data = snap.val();
+	      $('#bookName').val(data.bookName);
+	      $('#notes').val(data.notes);
+	      $('#isbn').val(data.isbn);
+	      $('#date').val(data.date);
+	      $('#picture').val(data.picture);
+	      $('#picture-display').attr('src', data.picture);
+	      $('#rating').val(data.rating);
+	    }
+
+	    //Save function
+	    function saveBook(book) {
+	      var uid = firebase.auth().currentUser.uid;
+	      var postKey = params.id;
+	      var updates = {};
+	      updates['/user-books/' + uid + '/' + postKey] = book;
+
+	      return database.ref().update(updates);
+	    }
+
+	    $(document)
+	      .off('click', '#save')
+	      .on('click', '#save', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+	        var book = {
+	          bookName: $('#bookName').val(),
+	          notes: $('#notes').val(),
+	          isbn: $('#isbn').val(),
+	          date: $('#date').val(),
+	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveBook(book).then(function(){
+	          redirect('books/list');
+	        });
+	      })
+	      .on('click', '#delete', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+	        var book = null;
+	        var response = saveBook(book).then(function(){
+	          redirect('books/list');
+	        });
+	      })      
+	  }
+	}
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var firebase = __webpack_require__(2);
+	var $ = __webpack_require__(1);
+
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return decodeURI(results[1]) || 0;
+	    }
+	}
+
+	var ListController = function(Auth, redirect) {
+	  return function () {
+	    var userId = firebase.auth().currentUser.uid;
+
+	    let sortMethod = "bookName";
+	    let searchValue = false;
+	    
+	    if($.urlParam("search")) {
+	      searchValue = $.urlParam("search");
+	    }
+
+	    // Get a reference to the database service
+	    var markup = '';
+	    var database = firebase.database();
+	    var query;
+	    
+	    if(searchValue) {
+	      query = firebase.database().ref("user-books/" + userId).orderByChild(sortMethod).equalTo(searchValue);
+	    } 
+	    else {
+	      query = firebase.database().ref("user-books/" + userId).orderByChild(sortMethod);
+	    }
+
+	    query.once("value")
+	      .then(function(snapshot) {
+	        //showMore = Object.keys(snapshot.val()).length > 10;
+	        snapshot.forEach(renderSingleSnapshot);
+	      }).then(function(){
+	        $(document).find('#list').html(markup);
+	      });
+
+	    var renderSingleSnapshot = function(childSnapshot) {
+	      var book = childSnapshot.val();
+	      var html = '';
+	      
+	      html += '<li class="list-group-item book">';
+	      html +=  '<div class="row">';
+	      html +=   '<div class="col-md-10">';
+	      html +=     '<h4>'+  book.bookName +'</h4>';
+
+	      if(book.rating) {
+
+	        for(var i = 0; i < 5; i++) {
+	          if(i < book.rating)
+	            html +=     '<i class="fa fa-star star-rating" aria-hidden="true"></i>';
+	          else
+	            html +=     '<i class="fa fa-star-o star-rating" aria-hidden="true"></i>';            
+	        }
+	      }
+
+	      html +=   '</div>';
+	      html +=   '<div class="col-md-2">';
+	      html +=     '<a class="pull-right" href="#/books/'+childSnapshot.key+'/edit">Edit</a>';        
+	      html +=   '</div>';
+	      html +=  '</div>';
+	      html += '</li>';
+
+	      markup += html;
+	    }
+	  }
+	}
+
+	module.exports = ListController;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(1);
+	var firebase = __webpack_require__(2);
+
+	module.exports = function(Auth, redirect) {
+	  return function () {
+	    // Get a reference to the database service
+	    var database = firebase.database();
+	    var FILE_URL = '';
+	    var IMGUR_API_KEY = '';
+
+	    //Still insecure, but better then hardcoding!
+	    var query = firebase.database().ref('secrets/4c149f04-c381-457');
+	    query.once("value").then(fillData);
+
+	    function fillData(snap) {
+	      var data = snap.val();
+	      IMGUR_API_KEY = data.secret;
+	    }
+
+	    function saveGame(game) {
+	      var uid = firebase.auth().currentUser.uid;
+	      // Get a key for a new Post.
+	      var newPostKey = firebase.database().ref().child('user-games/' + uid).push().key;
+
+	      // Write the new post's data simultaneously in both lists and the user's post list.
+	      var updates = {};
+	      updates['/user-games/' + uid + '/' + newPostKey] = game;
+
+	      return firebase.database().ref().update(updates);
+	    }
+
+	    $(document)
+	      .on('click', '#uploadImage', function(e) {
+
+	        var fileData = $('#picture')[0].files[0];
+	        
+	        if(!fileData)
+	          return;
+
+	        $.ajax({
+	          async: true,
+	          url: 'https://api.imgur.com/3/image',
+	          processData: false,
+	          method: 'POST',
+	          headers: {
+	            Authorization: 'Client-ID ' + IMGUR_API_KEY,
+	            Accept: 'application/json'
+	          },
+	          data: fileData,
+	          success: function(result) {
+	            FILE_URL = result.data.link;
+	            e.target.classList.remove("btn-danger");
+	            e.target.classList.add("btn-success");
+	          },
+	          error: function(err) {
+	            console.log(err);
+	            e.target.classList.add("btn-danger");
+	            e.target.classList.remove("btn-success");
+	          }
+	        });
+
+	      })
+	      .off('click', '#add')
+	      .on('click', '#add', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+
+	        var game = {
+	          gameName: $('#gameName').val(),
+	          notes: $('#notes').val(),
+	          serial: $('#serial').val(),
+	          console: $('#console').val(),          
+	          date: $('#date').val(),
+	          picture: FILE_URL,
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveGame(game).then(function(){
+	          redirect('games/list');
+	        });        
+	      })
+	  }
+	}
+
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(1);
+	var firebase = __webpack_require__(2);
+
+	module.exports = function(Auth, redirect) {
+	  return function (params) {
+	    // Get a reference to the database service
+	    var database = firebase.database();
+	    var uid = firebase.auth().currentUser.uid;
+	    var query = firebase.database().ref("user-games/" + uid + "/" + params.id);
+
+	    //Fire Query
+	    query.once("value").then(fillData)
+
+	    //Fill The data
+	    function fillData(snap) {
+	      var data = snap.val();
+	      $('#gameName').val(data.gameName);
+	      $('#notes').val(data.notes);
+	      $('#serial').val(data.serial);
+	      $('#console').val(data.console);      
+	      $('#date').val(data.date);
+	      $('#picture').val(data.picture);
+	      $('#picture-display').attr('src', data.picture);
+	      $('#rating').val(data.rating);
+	    }
+
+	    //Save function
+	    function saveGame(game) {
+	      var uid = firebase.auth().currentUser.uid;
+	      var postKey = params.id;
+	      var updates = {};
+	      updates['/user-games/' + uid + '/' + postKey] = game;
+
+	      return database.ref().update(updates);
+	    }
+
+	    $(document)
+	      .off('click', '#save')
+	      .on('click', '#save', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+	        var game = {
+	          gameName: $('#gameName').val(),
+	          notes: $('#notes').val(),
+	          serial: $('#serial').val(),
+	          console: $('#console').val(),          
+	          date: $('#date').val(),
+	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveGame(game).then(function(){
+	          redirect('games/list');
+	        });
+	      })
+	      .on('click', '#delete', function(e) {
+	        var uid = firebase.auth().currentUser.uid;
+	        var game = null;
+	        var response = saveGame(game).then(function(){
+	          redirect('games/list');
+	        });
+	      })      
+	  }
+	}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var firebase = __webpack_require__(2);
+	var $ = __webpack_require__(1);
+
+	$.urlParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    if (results==null){
+	       return null;
+	    }
+	    else{
+	       return decodeURI(results[1]) || 0;
+	    }
+	}
+
+	var ListController = function(Auth, redirect) {
+	  return function () {
+	    var userId = firebase.auth().currentUser.uid;
+
+	    let sortMethod = "gameName";
+	    let searchValue = false;
+	    
+	    if($.urlParam("search")) {
+	      searchValue = $.urlParam("search");
+	    }
+
+	    // Get a reference to the database service
+	    var markup = '';
+	    var database = firebase.database();
+	    var query;
+	    
+	    if(searchValue) {
+	      query = firebase.database().ref("user-games/" + userId).orderByChild(sortMethod).equalTo(searchValue);
+	    } 
+	    else {
+	      query = firebase.database().ref("user-games/" + userId).orderByChild(sortMethod);
+	    }
+
+	    query.once("value")
+	      .then(function(snapshot) {
+	        //showMore = Object.keys(snapshot.val()).length > 10;
+	        snapshot.forEach(renderSingleSnapshot);
+	      }).then(function(){
+	        $(document).find('#list').html(markup);
+	      });
+
+	    var renderSingleSnapshot = function(childSnapshot) {
+	      var game = childSnapshot.val();
+	      var html = '';
+	      
+	      html += '<li class="list-group-item game">';
+	      html +=  '<div class="row">';
+	      html +=   '<div class="col-md-10">';
+	      html +=     '<h4>'+  game.gameName +'</h4>';
+
+	      if(game.rating) {
+
+	        for(var i = 0; i < 5; i++) {
+	          if(i < game.rating)
+	            html +=     '<i class="fa fa-star star-rating" aria-hidden="true"></i>';
+	          else
+	            html +=     '<i class="fa fa-star-o star-rating" aria-hidden="true"></i>';            
+	        }
+	      }
+
+	      html +=   '</div>';
+	      html +=   '<div class="col-md-2">';
+	      html +=     '<a class="pull-right" href="#/games/'+childSnapshot.key+'/edit">Edit</a>';        
+	      html +=   '</div>';
+	      html +=  '</div>';
+	      html += '</li>';
+
+	      markup += html;
+	    }
+	  }
+	}
+
+	module.exports = ListController;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(1);
 
 	module.exports = function (Auth, redirect) {
 	  return function(){
@@ -11720,7 +12276,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 13 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
@@ -11808,7 +12364,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 14 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
@@ -11874,7 +12430,7 @@ webpackJsonp([1,0],[
 	}
 
 /***/ }),
-/* 15 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var firebase = __webpack_require__(2);
@@ -11956,7 +12512,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 16 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
@@ -12044,7 +12600,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 17 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
@@ -12110,7 +12666,7 @@ webpackJsonp([1,0],[
 	}
 
 /***/ }),
-/* 18 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var firebase = __webpack_require__(2);
@@ -12165,7 +12721,7 @@ webpackJsonp([1,0],[
 
 
 /***/ }),
-/* 19 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);
@@ -12178,7 +12734,7 @@ webpackJsonp([1,0],[
 	}
 
 /***/ }),
-/* 20 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(1);

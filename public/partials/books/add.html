@@ -1,0 +1,60 @@
+<div class="marketing">
+  <form class="form" method="GET" >
+    <h4 class="with-seperator"></h4>
+    <h4 class="with-seperator edit-actors hidden"></h4>
+    <div class="form-group row">
+
+      <label for="bookName" class="col-sm-3 control-label">Title</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="bookName" placeholder="Name">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="date" class="col-sm-3 control-label">Date</label>
+      <div class="col-sm-9">
+        <input type="date" class="form-control" id="date" placeholder="Date">
+      </div>
+    </div>    
+
+    <div class="form-group row">
+      <label for="isbn" class="col-sm-3 control-label">ISBN</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="isbn" placeholder="91778912687">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="rating" class="col-sm-3 control-label">Rating</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="rating" placeholder="1-5">
+      </div>
+    </div>   
+
+    <div class="form-group row">
+      <label for="picture" class="col-sm-3 control-label">Picture</label>
+      <div class="col-sm-8">
+        <input type="file" class="form-control" name="image" id="picture" placeholder="http://images.com">
+      </div>
+      <div class="col-sm-1">
+        <button type="button" value="uploadImage" id="uploadImage" class="btn btn-primary-outline sort-button">Upload</button>      
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="notes" class="col-sm-3 control-label">Notes</label>
+      <div class="col-sm-9">
+        <textarea type="text" rows="10" class="form-control" id="notes" placeholder="Notes"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group row clearfix">
+      <div class="col-lg-3">&nbsp;</div>
+      <div class="col-lg-9">
+        <button type="button" id="add" class="btn btn-primary-outline add-actors">Add Book</button>
+        <button type="button" id="edit" class="btn btn-primary-outline edit-actors hidden">Save Book</button>
+      </div>
+    </div>
+
+  </form>
+</div>
