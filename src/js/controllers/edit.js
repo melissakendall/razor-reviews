@@ -5,7 +5,7 @@ module.exports = function(Auth, redirect) {
   return function (params) {
     // Get a reference to the database service
     var database = firebase.database();
-    var query = firebase.database().ref("meals/"+params.id);
+    var query = firebase.database().ref("user-meals/"+params.id);
 
     //Fire Query
     query.once("value").then(fillData)
@@ -27,7 +27,6 @@ module.exports = function(Auth, redirect) {
       var uid = firebase.auth().currentUser.uid;
       var postKey = params.id;
       var updates = {};
-      updates['/meals/' + postKey] = meal;
       updates['/user-meals/' + uid + '/' + postKey] = meal;
 
       return database.ref().update(updates);

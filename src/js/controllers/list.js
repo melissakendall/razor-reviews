@@ -46,10 +46,10 @@ var ListController = function(Auth, redirect) {
     var query;
     
     if(searchValue) {
-      query = firebase.database().ref("meals").orderByChild(sortMethod).equalTo(searchValue);
+      query = firebase.database().ref("user-meals/" + userId).orderByChild(sortMethod).equalTo(searchValue);
     } 
     else {
-      query = firebase.database().ref("meals").orderByChild(sortMethod);
+      query = firebase.database().ref("user-meals/" + userId).orderByChild(sortMethod);
     }
 
     query.once("value")

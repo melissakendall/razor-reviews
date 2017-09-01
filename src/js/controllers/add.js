@@ -20,11 +20,10 @@ module.exports = function(Auth, redirect) {
     function saveMeal(meal) {
       var uid = firebase.auth().currentUser.uid;
       // Get a key for a new Post.
-      var newPostKey = firebase.database().ref().child('meals').push().key;
+      var newPostKey = firebase.database().ref().child('user-meals/' + uid).push().key;
 
       // Write the new post's data simultaneously in both lists and the user's post list.
       var updates = {};
-      updates['/meals/' + newPostKey] = meal;
       updates['/user-meals/' + uid + '/' + newPostKey] = meal;
 
       return firebase.database().ref().update(updates);
