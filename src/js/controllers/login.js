@@ -5,7 +5,7 @@ module.exports = function (Auth, redirect) {
     //Redirect to Home
     var redirectToHome = function(user) {
       if(user){
-        redirect('list');
+        redirect('selectCategory');
       }
     }
 
@@ -23,7 +23,6 @@ module.exports = function (Auth, redirect) {
 
     $('.logout-link').hide();
     $('.login-link').hide();
-    $('.nav-item').hide();
 
     //Social and Anonymous Auth Scheme Login
     $(document)
