@@ -214,12 +214,11 @@ webpackJsonp([1,0],[
 	    var user = Auth.checkLoggedInUser();
 
 	    if(user) {
-	      
+
 	      //Detect imgur redirect and store cookie
 	      var imgurToken = getParameterByName("access_token");
 	      if(imgurToken) {
 	        setCookie("imgurToken", imgurToken, 30);
-	        window.location.href = window.location.origin;   
 	      }
 
 	      //No imgur cookie stored? offer this option
