@@ -6,15 +6,23 @@ module.exports = function(Auth, redirect) {
     // Get a reference to the database service
     var database = firebase.database();
     var FILE_URL = '';
-    var IMGUR_API_KEY = '';
 
-    //Still insecure, but better then hardcoding!
-    var query = firebase.database().ref('secrets/4c149f04-c381-457');
-    query.once("value").then(fillData);
+    function prepareGame() {
+        var uid = firebase.auth().currentUser.uid;
 
-    function fillData(snap) {
-      var data = snap.val();
-      IMGUR_API_KEY = data.secret;
+        var game = {
+          gameName: $('#gameName').val(),
+          notes: $('#notes').val(),
+          serial: $('#serial').val(),
+          console: $('#console').val(),          
+          date: $('#date').val(),
+          picture: FILE_URL,
+          rating: $('#rating').val(),
+          uid: uid
+        }
+        var response = saveGame(game).then(function(){
+          redirect('games/list');
+        });  
     }
 
     function saveGame(game) {
@@ -30,12 +38,15 @@ module.exports = function(Auth, redirect) {
     }
 
     $(document)
-      .on('click', '#uploadImage', function(e) {
+      .off('click', '#add')
+      .on('click', '#add', function(e) {
 
+        var imgurToken = getCookie("imgurToken");
         var fileData = $('#picture')[0].files[0];
-        
-        if(!fileData)
-          return;
+
+        //Imgur turned off, dont even try to upload
+        if(!imgurToken || !fileData)
+          prepareGame();
 
         $.ajax({
           async: true,
@@ -43,7 +54,7 @@ module.exports = function(Auth, redirect) {
           processData: false,
           method: 'POST',
           headers: {
-            Authorization: 'Client-ID ' + IMGUR_API_KEY,
+            Authorization: 'Bearer ' + getCookie("imgurToken"),
             Accept: 'application/json'
           },
           data: fileData,
@@ -51,6 +62,9 @@ module.exports = function(Auth, redirect) {
             FILE_URL = result.data.link;
             e.target.classList.remove("btn-danger");
             e.target.classList.add("btn-success");
+
+            //Now move on
+            prepareGame();
           },
           error: function(err) {
             console.log(err);
@@ -58,26 +72,7 @@ module.exports = function(Auth, redirect) {
             e.target.classList.remove("btn-success");
           }
         });
-
-      })
-      .off('click', '#add')
-      .on('click', '#add', function(e) {
-        var uid = firebase.auth().currentUser.uid;
-
-        var game = {
-          gameName: $('#gameName').val(),
-          notes: $('#notes').val(),
-          serial: $('#serial').val(),
-          console: $('#console').val(),          
-          date: $('#date').val(),
-          picture: FILE_URL,
-          rating: $('#rating').val(),
-          uid: uid
-        }
-        var response = saveGame(game).then(function(){
-          redirect('games/list');
-        });        
-      })
+      });
   }
 }
 

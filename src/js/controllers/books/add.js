@@ -6,15 +6,22 @@ module.exports = function(Auth, redirect) {
     // Get a reference to the database service
     var database = firebase.database();
     var FILE_URL = '';
-    var IMGUR_API_KEY = '';
 
-    //Still insecure, but better then hardcoding!
-    var query = firebase.database().ref('secrets/4c149f04-c381-457');
-    query.once("value").then(fillData);
+    function prepareBook() {
+      var uid = firebase.auth().currentUser.uid;
 
-    function fillData(snap) {
-      var data = snap.val();
-      IMGUR_API_KEY = data.secret;
+      var book = {
+        bookName: $('#bookName').val(),
+        isbn: $('#isbn').val(),          
+        notes: $('#notes').val(),
+        date: $('#date').val(),
+        picture: FILE_URL,
+        rating: $('#rating').val(),
+        uid: uid
+      }
+      var response = saveBook(book).then(function(){
+        redirect('books/list');
+      });        
     }
 
     function saveBook(book) {
@@ -30,12 +37,15 @@ module.exports = function(Auth, redirect) {
     }
 
     $(document)
-      .on('click', '#uploadImage', function(e) {
+      .off('click', '#add')
+      .on('click', '#add', function(e) {
 
+        var imgurToken = getCookie("imgurToken");
         var fileData = $('#picture')[0].files[0];
-        
-        if(!fileData)
-          return;
+
+        //Imgur turned off, dont even try to upload
+        if(!imgurToken || !fileData)
+          prepareBook();
 
         $.ajax({
           async: true,
@@ -43,7 +53,7 @@ module.exports = function(Auth, redirect) {
           processData: false,
           method: 'POST',
           headers: {
-            Authorization: 'Client-ID ' + IMGUR_API_KEY,
+            Authorization: 'Bearer ' + getCookie("imgurToken"),
             Accept: 'application/json'
           },
           data: fileData,
@@ -51,32 +61,19 @@ module.exports = function(Auth, redirect) {
             FILE_URL = result.data.link;
             e.target.classList.remove("btn-danger");
             e.target.classList.add("btn-success");
+
+            //Now move on
+            prepareBook();
           },
           error: function(err) {
             console.log(err);
             e.target.classList.add("btn-danger");
             e.target.classList.remove("btn-success");
           }
-        });
-
-      })
-      .off('click', '#add')
-      .on('click', '#add', function(e) {
-        var uid = firebase.auth().currentUser.uid;
-
-        var book = {
-          bookName: $('#bookName').val(),
-          isbn: $('#isbn').val(),          
-          notes: $('#notes').val(),
-          date: $('#date').val(),
-          picture: FILE_URL,
-          rating: $('#rating').val(),
-          uid: uid
-        }
-        var response = saveBook(book).then(function(){
-          redirect('books/list');
         });        
-      })
+
+      }
+    )
   }
 }
 
