@@ -207,27 +207,33 @@ $(document).ready(function() {
   //Initialize the Firebase App
   Auth.init(function() {
 
-    //Detect imgur redirect and store cookie
-    var imgurToken = getParameterByName("access_token");
-    if(imgurToken) {
-      setCookie("imgurToken", imgurToken, 30);
-      window.location.href = window.location.origin;   
-    }
+    var user = Auth.checkLoggedInUser();
 
-    //No imgur cookie stored? offer this option
-    if(!getCookie("imgurToken")) {
+    if(user) {
       
-      //Still insecure, but better then hardcoding!
-      var query = firebase.database().ref('secrets/4c149f04-c381-457');
-      query.once("value").then(function(snap) {
-        var data = snap.val();
-        IMGUR_API_KEY = data.secret;
+      //Detect imgur redirect and store cookie
+      var imgurToken = getParameterByName("access_token");
+      if(imgurToken) {
+        setCookie("imgurToken", imgurToken, 30);
+        window.location.href = window.location.origin;   
+      }
 
-        //Add HREF and show Imgur Link
-        $('#imgurLink').attr('href', 'https://api.imgur.com/oauth2/authorize?client_id=' + IMGUR_API_KEY + '&response_type=token');
-        $('#imgurLink').show();
+      //No imgur cookie stored? offer this option
+      if(!getCookie("imgurToken")) {
+        
+        //Still insecure, but better then hardcoding!
+        var query = firebase.database().ref('secrets/4c149f04-c381-457');
+        query.once("value").then(function(snap) {
+          var data = snap.val();
+          IMGUR_API_KEY = data.secret;
 
-      });
+          //Add HREF and show Imgur Link
+          $('#imgurLink').attr('href', 'https://api.imgur.com/oauth2/authorize?client_id=' + IMGUR_API_KEY + '&response_type=token');
+          $('#imgurLink').show();
+
+        });
+      }
+
     }
 
     //Logout Button
@@ -241,8 +247,6 @@ $(document).ready(function() {
 
       redirectToLogin(); 
     });
-
-    var user = Auth.checkLoggedInUser();
 
     if( user ){
       $('.logout-link').css('display', 'block');
