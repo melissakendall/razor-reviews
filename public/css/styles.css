@@ -21,7 +21,9 @@ body {
   border-bottom: .05rem solid #e5e5e5;
 }
 .nav-item .login-link,
-.nav-item .logout-link{
+.nav-item .logout-link,
+.nav-item .category-link,
+.nav-item .imgur-link {
   display: none;
 }
 

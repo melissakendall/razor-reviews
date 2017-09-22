@@ -241,18 +241,20 @@ $(document).ready(function() {
       //Logout, switch displays
       Auth.logout();
 
-      $('.login-link').css('display', 'block');
+      $('.login-link').show();
       $('.logout-link').hide();
 
       redirectToLogin(); 
     });
 
     if( user ){
-      $('.logout-link').css('display', 'block');
+      $('.logout-link').show();
       $('.login-link').hide();
+      $('.category-link').show();
     } else {
-      $('.login-link').css('display', 'block');
+      $('.login-link').show();
       $('.logout-link').hide();
+      $('.category-link').hide();
     }
 
     appRouter.listen();
