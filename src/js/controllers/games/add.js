@@ -5,25 +5,6 @@ module.exports = function(Auth, redirect) {
   return function () {
     // Get a reference to the database service
     var database = firebase.database();
-    var FILE_URL = '';
-
-    function prepareGame() {
-        var uid = firebase.auth().currentUser.uid;
-
-        var game = {
-          gameName: $('#gameName').val(),
-          notes: $('#notes').val(),
-          serial: $('#serial').val(),
-          console: $('#console').val(),          
-          date: $('#date').val(),
-          picture: FILE_URL,
-          rating: $('#rating').val(),
-          uid: uid
-        }
-        var response = saveGame(game).then(function(){
-          redirect('games/list');
-        });  
-    }
 
     function saveGame(game) {
       var uid = firebase.auth().currentUser.uid;
@@ -38,40 +19,25 @@ module.exports = function(Auth, redirect) {
     }
 
     $(document)
-      .off('click', '#add')
-      .on('click', '#add', function(e) {
+      .off('click', '#save')
+      .on('click', '#save', function(e) {
 
-        var imgurToken = getCookie("imgurToken");
-        var fileData = $('#picture')[0].files[0];
+        var uid = firebase.auth().currentUser.uid;
 
-        //Imgur turned off, dont even try to upload
-        if(!imgurToken || !fileData)
-          prepareGame();
+        var game = {
+          gameName: $('#gameName').val(),
+          notes: $('#notes').val(),
+          serial: $('#serial').val(),
+          console: $('#console').val(),          
+          date: $('#date').val(),
+          picture: $('#picture').val(),
+          rating: $('#rating').val(),
+          uid: uid
+        }
+        var response = saveGame(game).then(function(){
+          redirect('games/list');
+        });  
 
-        $.ajax({
-          async: true,
-          url: 'https://api.imgur.com/3/image',
-          processData: false,
-          method: 'POST',
-          headers: {
-            Authorization: 'Bearer ' + getCookie("imgurToken"),
-            Accept: 'application/json'
-          },
-          data: fileData,
-          success: function(result) {
-            FILE_URL = result.data.link;
-            e.target.classList.remove("btn-danger");
-            e.target.classList.add("btn-success");
-
-            //Now move on
-            prepareGame();
-          },
-          error: function(err) {
-            console.log(err);
-            e.target.classList.add("btn-danger");
-            e.target.classList.remove("btn-success");
-          }
-        });
       });
   }
 }

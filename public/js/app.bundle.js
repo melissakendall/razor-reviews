@@ -204,7 +204,6 @@ webpackJsonp([1,0],[
 
 	//Error box indexes
 	var errorIndex = 0;
-	var IMGUR_API_KEY = '';
 
 	$(document).ready(function() {
 
@@ -212,32 +211,6 @@ webpackJsonp([1,0],[
 	  Auth.init(function() {
 
 	    var user = Auth.checkLoggedInUser();
-
-	    if(user) {
-
-	      //Detect imgur redirect and store cookie
-	      var imgurToken = getParameterByName("access_token");
-	      if(imgurToken) {
-	        setCookie("imgurToken", imgurToken, 30);
-	      }
-
-	      //No imgur cookie stored? offer this option
-	      if(!getCookie("imgurToken")) {
-	        
-	        //Still insecure, but better then hardcoding!
-	        var query = firebase.database().ref('secrets/4c149f04-c381-457');
-	        query.once("value").then(function(snap) {
-	          var data = snap.val();
-	          IMGUR_API_KEY = data.secret;
-
-	          //Add HREF and show Imgur Link
-	          $('#imgurLink').attr('href', 'https://api.imgur.com/oauth2/authorize?client_id=' + IMGUR_API_KEY + '&response_type=token');
-	          $('#imgurLink').show();
-
-	        });
-	      }
-
-	    }
 
 	    //Logout Button
 	    $(document).on('click', '.logout-link', function (e) {
@@ -11775,24 +11748,6 @@ webpackJsonp([1,0],[
 	  return function () {
 	    // Get a reference to the database service
 	    var database = firebase.database();
-	    var FILE_URL = '';
-
-	    function prepareBook() {
-	      var uid = firebase.auth().currentUser.uid;
-
-	      var book = {
-	        bookName: $('#bookName').val(),
-	        isbn: $('#isbn').val(),          
-	        notes: $('#notes').val(),
-	        date: $('#date').val(),
-	        picture: FILE_URL,
-	        rating: $('#rating').val(),
-	        uid: uid
-	      }
-	      var response = saveBook(book).then(function(){
-	        redirect('books/list');
-	      });        
-	    }
 
 	    function saveBook(book) {
 	      var uid = firebase.auth().currentUser.uid;
@@ -11807,40 +11762,23 @@ webpackJsonp([1,0],[
 	    }
 
 	    $(document)
-	      .off('click', '#add')
-	      .on('click', '#add', function(e) {
+	      .off('click', '#save')
+	      .on('click', '#save', function(e) {
+	   
+	        var uid = firebase.auth().currentUser.uid;
 
-	        var imgurToken = getCookie("imgurToken");
-	        var fileData = $('#picture')[0].files[0];
-
-	        //Imgur turned off, dont even try to upload
-	        if(!imgurToken || !fileData)
-	          prepareBook();
-
-	        $.ajax({
-	          async: true,
-	          url: 'https://api.imgur.com/3/image',
-	          processData: false,
-	          method: 'POST',
-	          headers: {
-	            Authorization: 'Bearer ' + getCookie("imgurToken"),
-	            Accept: 'application/json'
-	          },
-	          data: fileData,
-	          success: function(result) {
-	            FILE_URL = result.data.link;
-	            e.target.classList.remove("btn-danger");
-	            e.target.classList.add("btn-success");
-
-	            //Now move on
-	            prepareBook();
-	          },
-	          error: function(err) {
-	            console.log(err);
-	            e.target.classList.add("btn-danger");
-	            e.target.classList.remove("btn-success");
-	          }
-	        });        
+	        var book = {
+	          bookName: $('#bookName').val(),
+	          isbn: $('#isbn').val(),          
+	          notes: $('#notes').val(),
+	          date: $('#date').val(),
+	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveBook(book).then(function(){
+	          redirect('books/list');
+	        });
 
 	      }
 	    )
@@ -12008,25 +11946,6 @@ webpackJsonp([1,0],[
 	  return function () {
 	    // Get a reference to the database service
 	    var database = firebase.database();
-	    var FILE_URL = '';
-
-	    function prepareGame() {
-	        var uid = firebase.auth().currentUser.uid;
-
-	        var game = {
-	          gameName: $('#gameName').val(),
-	          notes: $('#notes').val(),
-	          serial: $('#serial').val(),
-	          console: $('#console').val(),          
-	          date: $('#date').val(),
-	          picture: FILE_URL,
-	          rating: $('#rating').val(),
-	          uid: uid
-	        }
-	        var response = saveGame(game).then(function(){
-	          redirect('games/list');
-	        });  
-	    }
 
 	    function saveGame(game) {
 	      var uid = firebase.auth().currentUser.uid;
@@ -12041,40 +11960,25 @@ webpackJsonp([1,0],[
 	    }
 
 	    $(document)
-	      .off('click', '#add')
-	      .on('click', '#add', function(e) {
+	      .off('click', '#save')
+	      .on('click', '#save', function(e) {
 
-	        var imgurToken = getCookie("imgurToken");
-	        var fileData = $('#picture')[0].files[0];
+	        var uid = firebase.auth().currentUser.uid;
 
-	        //Imgur turned off, dont even try to upload
-	        if(!imgurToken || !fileData)
-	          prepareGame();
+	        var game = {
+	          gameName: $('#gameName').val(),
+	          notes: $('#notes').val(),
+	          serial: $('#serial').val(),
+	          console: $('#console').val(),          
+	          date: $('#date').val(),
+	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveGame(game).then(function(){
+	          redirect('games/list');
+	        });  
 
-	        $.ajax({
-	          async: true,
-	          url: 'https://api.imgur.com/3/image',
-	          processData: false,
-	          method: 'POST',
-	          headers: {
-	            Authorization: 'Bearer ' + getCookie("imgurToken"),
-	            Accept: 'application/json'
-	          },
-	          data: fileData,
-	          success: function(result) {
-	            FILE_URL = result.data.link;
-	            e.target.classList.remove("btn-danger");
-	            e.target.classList.add("btn-success");
-
-	            //Now move on
-	            prepareGame();
-	          },
-	          error: function(err) {
-	            console.log(err);
-	            e.target.classList.add("btn-danger");
-	            e.target.classList.remove("btn-success");
-	          }
-	        });
 	      });
 	  }
 	}
@@ -12306,24 +12210,6 @@ webpackJsonp([1,0],[
 	  return function () {
 	    // Get a reference to the database service
 	    var database = firebase.database();
-	    var FILE_URL = '';
-
-	    function prepareMeal() {
-	      var uid = firebase.auth().currentUser.uid;
-
-	      var meal = {
-	        mealName: $('#mealName').val(),
-	        notes: $('#notes').val(),
-	        ate: $('#ate').val(),
-	        date: $('#date').val(),
-	        picture: FILE_URL,
-	        rating: $('#rating').val(),
-	        uid: uid
-	      }
-	      var response = saveMeal(meal).then(function(){
-	        redirect('meals/list');
-	      });
-	    }
 
 	    function saveMeal(meal) {
 	      var uid = firebase.auth().currentUser.uid;
@@ -12338,40 +12224,24 @@ webpackJsonp([1,0],[
 	    }
 
 	    $(document)
-	      .off('click', '#add')
-	      .on('click', '#add', function(e) {
+	      .off('click', '#save')
+	      .on('click', '#save', function(e) {
 
-	        var imgurToken = getCookie("imgurToken");
-	        var fileData = $('#picture')[0].files[0];
+	        var uid = firebase.auth().currentUser.uid;
 
-	        //Imgur turned off, dont even try to upload
-	        if(!imgurToken || !fileData)
-	          prepareMeal();
-
-	        $.ajax({
-	          async: true,
-	          url: 'https://api.imgur.com/3/image',
-	          processData: false,
-	          method: 'POST',
-	          headers: {
-	            Authorization: 'Bearer ' + getCookie("imgurToken"),
-	            Accept: 'application/json'
-	          },
-	          data: fileData,
-	          success: function(result) {
-	            FILE_URL = result.data.link;
-	            e.target.classList.remove("btn-danger");
-	            e.target.classList.add("btn-success");
-
-	            //Now move on
-	            prepareMeal();
-	          },
-	          error: function(err) {
-	            console.log(err);
-	            e.target.classList.add("btn-danger");
-	            e.target.classList.remove("btn-success");
-	          }
+	        var meal = {
+	          mealName: $('#mealName').val(),
+	          notes: $('#notes').val(),
+	          ate: $('#ate').val(),
+	          date: $('#date').val(),
+	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
+	          uid: uid
+	        }
+	        var response = saveMeal(meal).then(function(){
+	          redirect('meals/list');
 	        });
+
 	      });
 	  }
 	}
@@ -12537,24 +12407,6 @@ webpackJsonp([1,0],[
 	  return function () {
 	    // Get a reference to the database service
 	    var database = firebase.database();
-	    var FILE_URL = '';
-
-	    function prepareRazor() {
-	        var uid = firebase.auth().currentUser.uid;
-
-	        var razor = {
-	          razorName: $('#razorName').val(),
-	          notes: $('#notes').val(),
-	          date: $('#date').val(),
-	          picture: FILE_URL,
-	          rating: $('#rating').val(),
-	          uses: $('#uses').val(),          
-	          uid: uid
-	        }
-	        var response = saveRazor(razor).then(function(){
-	          redirect('razors/list');
-	        });  
-	    }
 
 	    function saveRazor(razor) {
 	      var uid = firebase.auth().currentUser.uid;
@@ -12569,40 +12421,24 @@ webpackJsonp([1,0],[
 	    }
 
 	    $(document)
-	      .off('click', '#add')
-	      .on('click', '#add', function(e) {
+	      .off('click', '#save')
+	      .on('click', '#save', function(e) {
 
-	        var imgurToken = getCookie("imgurToken");
-	        var fileData = $('#picture')[0].files[0];
+	        var uid = firebase.auth().currentUser.uid;
 
-	        //Imgur turned off, dont even try to upload
-	        if(!imgurToken || !fileData)
-	          prepareRazor();
-
-	        $.ajax({
-	          async: true,
-	          url: 'https://api.imgur.com/3/image',
-	          processData: false,
-	          method: 'POST',
-	          headers: {
-	            Authorization: 'Bearer ' + getCookie("imgurToken"),
-	            Accept: 'application/json'
-	          },
-	          data: fileData,
-	          success: function(result) {
-	            FILE_URL = result.data.link;
-	            e.target.classList.remove("btn-danger");
-	            e.target.classList.add("btn-success");
-
-	            //Now move on
-	            prepareRazor();
-	          },
-	          error: function(err) {
-	            console.log(err);
-	            e.target.classList.add("btn-danger");
-	            e.target.classList.remove("btn-success");
-	          }
-	        });
+	        var razor = {
+	          razorName: $('#razorName').val(),
+	          notes: $('#notes').val(),
+	          date: $('#date').val(),
+	          picture: $('#picture').val(),
+	          rating: $('#rating').val(),
+	          uses: $('#uses').val(),          
+	          uid: uid
+	        }
+	        var response = saveRazor(razor).then(function(){
+	          redirect('razors/list');
+	        });  
+	  
 	      });
 	  }
 	}
