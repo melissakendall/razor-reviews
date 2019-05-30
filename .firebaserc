@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "razor-reviews"
+    "default": "razor-reviews",
+    "staging": "razor-reviews"
   }
 }
