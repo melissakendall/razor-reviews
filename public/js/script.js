@@ -64,6 +64,7 @@ function clearFields() {
 	$("#rating").val("");
 	$("#notes").val("");
 	$("#saveReview").val("");	
+	$('.list-group-item').removeClass('active');
 }
 
 function populate(obj) {
@@ -88,14 +89,7 @@ function hydrateReviews() {
 	db.collection("reviews").get().then((querySnapshot) => {
 		querySnapshot.forEach((doc) => {
 
-			var stars = "";
-
-			//for(var i = 1; i < doc.data().rating; i++) {
-			//	stars += "<i class='fa fa-star star-rating' aria-hidden='true'></i>";
-			//}
-
-			$("#reviewList").append( $("<li>", { class:'list-group-item meal', id: doc.id, text: doc.data().name, onClick: 'populate(this)' }) );
-
+			$("#reviewList").append( $("<li>", { class:'list-group-item meal', id: doc.id, text: doc.data().name + " (" + doc.data().rating + ") ", onClick: 'populate(this)' }) );
 		});
 	});
 }
