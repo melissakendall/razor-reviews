@@ -1,12 +1,62 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
-  </head>
-  <body>
-    <script type="text/javascript" src="script.js"></script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Private Reviews</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+	<div class="container">
+		<form class="form">
+		    <div class="form-group row">
+		      <label for="mealName" class="col-sm-3 control-label">Name</label>
+		      <div class="col-sm-9">
+		        <input type="text" class="form-control" id="mealName" placeholder="Name">
+		      </div>
+		    </div>
+		    <div class="form-group row">
+		      <label for="rating" class="col-sm-3 control-label">Rating</label>
+		      <div class="col-sm-9">
+		        <input type="text" class="form-control" id="rating" placeholder="1-5">
+		      </div>
+		    </div>    
+		    <div class="form-group row">
+		      <label for="notes" class="col-sm-3 control-label">Notes</label>
+		      <div class="col-sm-9">
+		        <textarea type="text" rows="10" class="form-control" id="notes" placeholder="Notes"></textarea>
+		      </div>
+		    </div>
+			<div class="form-group row">
+			  <div class="col-xs-4 col-xs-offset-2">
+			    <button type="button" id="saveReview" value="" class="btn btn-primary-outline">Save</button>
+			  </div>
+			  <div class="col-xs-4 col-xs-offset-2">
+			    <button type="button" id="clearReview" value="" class="btn btn-primary-outline">Clear</button>
+			  </div> 			  
+			</div>		    
+		  </form>
+	</div>
+	<div class="container">
+		<h2>Review List</h2>
+	</div>	
+	<div class="container">
+		<ul id="reviewList" class="list-group">
+		</ul>
+	</div>
+
+	<!-- Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-app.js"></script>
+
+	<!-- Add Firebase products that you want to use -->
+	<script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/6.1.0/firebase-firestore.js"></script>
+
+	<!-- Scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/script.js"></script>
+</body>
 </html>
