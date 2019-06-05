@@ -18,14 +18,18 @@ var db = firebase.firestore();
 
 $(document).ready(function() {
 
-	hydrateReviews();
+	$("#selectSet").change(function() {
+		clearFields();
+		hydrateReviews();
+	});
 
 	$("#saveReview").click(function() {
 		var id = $(this).val();
+		var selectedSet = $("#selectSet").val();
 
 		if(id) {
 			//Edit
-			db.collection("reviews").doc(id).set({
+			db.collection(selectedSet).doc(id).set({
 			    name: $("#mealName").val(),
 			    rating: $("#rating").val(),
 			    notes: $("#notes").val()
@@ -33,7 +37,7 @@ $(document).ready(function() {
 		}
 		else {
 			//Save
-			db.collection("reviews").doc().set({
+			db.collection(selectedSet).doc().set({
 			    name: $("#mealName").val(),
 			    rating: $("#rating").val(),
 			    notes: $("#notes").val()
@@ -47,9 +51,10 @@ $(document).ready(function() {
 
 	$("#deleteReview").click(function() {
 		var id = $(this).val();
+		var selectedSet = $("#selectSet").val();
 
 		if(id) {
-			db.collection("reviews").doc(id).delete();
+			db.collection(selectedSet).doc(id).delete();
 		}
 
 		clearFields();
@@ -76,7 +81,9 @@ function populate(obj) {
 	$('.list-group-item').removeClass('active');
 	$(obj).addClass('active');
 
-	var review = db.collection("reviews").doc(obj.id).get().then(function(doc) {
+	var selectedSet = $("#selectSet").val();
+
+	var review = db.collection(selectedSet).doc(obj.id).get().then(function(doc) {
 
 		var review = doc.data();
 
@@ -91,8 +98,10 @@ function populate(obj) {
 
 function hydrateReviews() {
 	$("#reviewList").empty();
+
+	var selectedSet = $("#selectSet").val();
 	
-	db.collection("reviews").get().then((querySnapshot) => {
+	db.collection(selectedSet).get().then((querySnapshot) => {
 		querySnapshot.forEach((doc) => {
 
 			$("#reviewList").append( $("<li>", { class:'list-group-item meal', id: doc.id, text: doc.data().name + " (" + doc.data().rating + ") ", onClick: 'populate(this)' }) );
