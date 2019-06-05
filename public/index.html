@@ -3,52 +3,66 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    <title>Razor Reviews</title>
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
 
-<div class="row clearfix">
-    <div class="col-lg-12">
-      <h2>Login</h2>
-      <form>
-        <fieldset class="form-group">
-          <label for="email">Email</label>
-          <input type="email" class="form-control" id="txtEmail" autocomplete="off" placeholder="Email" style="">
-        </fieldset>
-        <fieldset class="form-group">
-          <label for="password">Password</label>
-          <input type="password" class="form-control" id="txtPassword" autocomplete="off" placeholder="Password" style="">
-        </fieldset>
-        <div class="form-group row clearfix">
-          <div class="col-xs-12">
-            <button type="button" id="btnLogin" class="btn btn-success-outline btn-block">Login</button>
-          </div>
+  <div class="container">    
+
+    <form class="form">
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <h2>Login</h2>
         </div>
-      </form>
-    </div>
+      </div>      
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <label for="email" class="col-sm-3 control-label">Email</label>
+        </div>
+        <div class="col-sm-6">
+          <input type="email" class="form-control" id="txtEmail" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <label for="password" class="col-sm-3 control-label">Password</label>
+        </div>
+        <div class="col-sm-6">
+          <input type="password" class="form-control" id="txtPassword" placeholder="Password">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2 col-sm-offset-3">
+          <button type="button" class="btn btn-success-outline btn-block" id="btnLogin">Login</button>
+        </div>
+      </div>
+    </form>
+
   </div>
 
-    <script>
-        var config = {
-              apiKey: "AIzaSyBKQQFa_fUW-2SUww7zX019idRrO2AWYTI",
-              databaseURL: "https://razor-reviews.firebaseio.com",
-              authDomain: "razor-reviews.firebaseapp.com",
-              projectId: "razor-reviews"
-        };
-        firebase.initializeApp(config);
+  <script>
+      var config = {
+            apiKey: "AIzaSyBKQQFa_fUW-2SUww7zX019idRrO2AWYTI",
+            databaseURL: "https://razor-reviews.firebaseio.com",
+            authDomain: "razor-reviews.firebaseapp.com",
+            projectId: "razor-reviews"
+      };
+      firebase.initializeApp(config);
 
-        document.getElementById("btnLogin").addEventListener('click', e=>{
-          const email = document.getElementById("txtEmail").value;
-          const pass = document.getElementById("txtPassword").value;
-          const promise = firebase.auth().signInWithEmailAndPassword(email, pass);
-        });
+      document.getElementById("btnLogin").addEventListener('click', e=>{
+        const email = document.getElementById("txtEmail").value;
+        const pass = document.getElementById("txtPassword").value;
+        const promise = firebase.auth().signInWithEmailAndPassword(email, pass);
+      });
 
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            window.location = 'home.html'; 
-          } 
-        });        
-    </script>
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          window.location = 'home.html'; 
+        } 
+      });        
+  </script>
   </body>
 </html>

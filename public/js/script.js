@@ -24,30 +24,32 @@ $(document).ready(function() {
 		var id = $(this).val();
 
 		if(id) {
+			//Edit
 			db.collection("reviews").doc(id).set({
 			    name: $("#mealName").val(),
 			    rating: $("#rating").val(),
 			    notes: $("#notes").val()
-			})
-			.then(function() {
-			    console.log("Document successfully written!");
-			})
-			.catch(function(error) {
-			    console.error("Error writing document: ", error);
 			});
 		}
 		else {
+			//Save
 			db.collection("reviews").doc().set({
 			    name: $("#mealName").val(),
 			    rating: $("#rating").val(),
 			    notes: $("#notes").val()
-			})
-			.then(function() {
-			    console.log("Document successfully written!");
-			})
-			.catch(function(error) {
-			    console.error("Error writing document: ", error);
-			});			
+			});		
+
+			clearFields();	
+		}
+
+		hydrateReviews();		
+	});
+
+	$("#deleteReview").click(function() {
+		var id = $(this).val();
+
+		if(id) {
+			db.collection("reviews").doc(id).delete();
 		}
 
 		clearFields();
@@ -64,7 +66,9 @@ function clearFields() {
 	$("#rating").val("");
 	$("#notes").val("");
 	$("#saveReview").val("");	
+	$("#deleteReview").val("");
 	$('.list-group-item').removeClass('active');
+	$('#deleteReview').prop('disabled', true);
 }
 
 function populate(obj) {
@@ -79,7 +83,9 @@ function populate(obj) {
 		$("#mealName").val(review.name);
 		$("#rating").val(review.rating);
 		$("#notes").val(review.notes);
-		$("#saveReview").val(obj.id)
+		$("#saveReview").val(obj.id);
+		$("#deleteReview").val(obj.id);
+		$('#deleteReview').prop('disabled', false);
 	});
 }
 
